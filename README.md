@@ -1,7 +1,7 @@
 node-lp_solve
 ============
 
-A NodeJS module which will execute and parse the output of an svn info command.
+A NodeJS module for createing and solving simple Linear Programs using lp_solve.
 
 Example:
 
