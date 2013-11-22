@@ -1,0 +1,21 @@
+{
+    "name": "lp_solve", 
+    "description": "A Node.js binding for lp_solve", 
+    "version": "0.1.2", 
+    "author": {
+      "name": "Stephen Remde",
+      "email": "smremde@gmail.com"
+    },
+    "repository": {
+        "type": "git", "url": "git://github.com/smremde/node-lp_solve.git"
+    },
+    "keywords": [ "lp_solve", "linear programming", "lpsolve" ], 
+    "dependencies": {
+        "bindings": "~1.1.1", 
+        "nan": "~0.5.0"
+    }, 
+    "license": "LGPL", 
+    "gypfile": true,
+    "main": "index",
+    "readme": "A NodeJS module which will execute and parse the output of an svn info command.\n\nExample:\n```javascript\nvar svninfo = require('svninfo');\n\nsvninfo(function (err, res) {\n  if (err)\n\n    console.log(err);  \n  else\n    console.log(res);\n});\n```\n\nOutput\n\n```\n{ rev: '230',\n  url: 'https://example.com/svn/test/tree',\n  last:\n   { rev: '230',\n     author: 'Steve',\n     date: Tue Jun 18 2013 15:12:10 GMT+0100 (BST) },\n  repository:\n   { root: 'https://example.com/svn/test',\n     id: 'bee123213-cddd-1234-abcd-12342323134' } }\n```\n\nAlternate syntax:\n\n```javascript\nvar svninfo = require('svninfo');\n\nsvninfo(callback);\nsvninfo(path, callback);\nsvninfo(options, callback);\n\nvar options = { \n  cwd: 'path',\n  timeout: 10\n}\n```"
+}
