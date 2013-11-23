@@ -23,6 +23,7 @@ private:
 
 
 	static NAN_METHOD(New);
+	static NAN_METHOD(SetOutputFile);
 	static NAN_METHOD(AddColumn);
 	static NAN_METHOD(SetColumnInteger);
 	static NAN_METHOD(AddConstraint);

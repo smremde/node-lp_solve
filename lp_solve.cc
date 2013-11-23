@@ -38,6 +38,7 @@ void LinearProgram::Init(Handle<Object> exports) {
 	tpl->SetClassName(NanSymbol("LinearProgram"));
 	tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
+	NODE_SET_PROTOTYPE_METHOD(tpl, "setOutputFile", LinearProgram::SetOutputFile);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "addColumn", LinearProgram::AddColumn);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "setColumnInteger", LinearProgram::SetColumnInteger);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "addConstraint", LinearProgram::AddConstraint);
@@ -62,6 +63,24 @@ NAN_METHOD(LinearProgram::New) {
 		//Local<Value> argv[0];
 		NanReturnValue(NanPersistentToLocal(constructor)->NewInstance(0, NULL));
 	}
+}
+
+NAN_METHOD(LinearProgram::SetOutputFile) {
+	NanScope();
+
+	assert(args[0]->IsString());
+
+	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(args.This());
+
+	size_t bc;
+
+	char *s = NanFromV8String(args[0].As<String>(), Nan::UTF8, &bc, NULL, 0, 0);
+
+	Local<Boolean> res = NanNewLocal<Boolean>(Boolean::New(set_outputfile(obj->lp, s)));
+
+	delete[] s;
+
+	NanReturnValue(res);
 }
 
 LinearProgram::LinearProgram() {
