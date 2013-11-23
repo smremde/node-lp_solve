@@ -7,7 +7,7 @@ function LinearProgram() {
 	this.lp_solve = new lp_solve();
 }
 
-LinearProgram.prototype.addColumn = function(name) {
+LinearProgram.prototype.addColumn = function(name, isInteger) {
 	
 	var id = this.Columns[name] = Object.keys(this.Columns).length + 1;
 
@@ -16,6 +16,10 @@ LinearProgram.prototype.addColumn = function(name) {
 	}
 
 	this.lp_solve.addColumn(name, id);
+
+	if (isInteger === true) {
+		this.lp_solve.setColumnInteger(id, true);
+	}
 
 	return name;
 }

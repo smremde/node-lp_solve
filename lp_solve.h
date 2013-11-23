@@ -24,6 +24,7 @@ private:
 
 	static NAN_METHOD(New);
 	static NAN_METHOD(AddColumn);
+	static NAN_METHOD(SetColumnInteger);
 	static NAN_METHOD(AddConstraint);
 	static NAN_METHOD(SetObjective);
 	static NAN_METHOD(GetObjectiveValue);

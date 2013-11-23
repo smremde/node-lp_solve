@@ -14,7 +14,7 @@ var Row = lpsolve.Row;
 
 var lp = new lpsolve.LinearProgram();
 
-var x = lp.addColumn('x');
+var x = lp.addColumn('x'); // lp.addColumn('x', true) for integer variable
 var y = lp.addColumn('y');
 
 

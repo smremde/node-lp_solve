@@ -39,6 +39,7 @@ void LinearProgram::Init(Handle<Object> exports) {
 	tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
 	NODE_SET_PROTOTYPE_METHOD(tpl, "addColumn", LinearProgram::AddColumn);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "setColumnInteger", LinearProgram::SetColumnInteger);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "addConstraint", LinearProgram::AddConstraint);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "setObjective", LinearProgram::SetObjective);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "solve", LinearProgram::Solve);
@@ -83,7 +84,19 @@ NAN_METHOD(LinearProgram::AddColumn) {
 	add_column(obj->lp, NULL);
 	set_col_name(obj->lp, i, col_string);
 
-	NanReturnValue(Number::New(0));
+	NanReturnUndefined();
+}
+
+NAN_METHOD(LinearProgram::SetColumnInteger) {
+	NanScope();
+	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(args.This());
+
+	int columnId = Handle<Number>::Cast(args[0])->Int32Value();
+	bool isInteger = Handle<Array>::Cast(args[1])->BooleanValue();
+
+  	set_int(obj->lp, columnId, isInteger);
+
+	NanReturnUndefined();
 }
 
 NAN_METHOD(LinearProgram::AddConstraint) {
@@ -118,7 +131,7 @@ NAN_METHOD(LinearProgram::AddConstraint) {
 		set_row_name(obj->lp, get_Nrows(obj->lp), row_string);
 	}
 
-	NanReturnValue(Number::New(0));
+	NanReturnUndefined();
 }
 
 NAN_METHOD(LinearProgram::SetObjective) {
@@ -148,7 +161,7 @@ NAN_METHOD(LinearProgram::SetObjective) {
 
  	set_obj_fnex(obj->lp, n, _rowValue, _rowId);
 
-	NanReturnValue(Number::New(0));
+	NanReturnUndefined();
 }
 
 NAN_METHOD(LinearProgram::Solve) {
