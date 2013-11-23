@@ -95,14 +95,17 @@ NAN_METHOD(LinearProgram::AddColumn) {
 	NanScope();
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(args.This());
 
-	String::Utf8Value utf8str(args[0]);
+	size_t bc;
 
-	char* col_string = (char*) *utf8str;
+	char *col_string = NanFromV8String(args[0].As<String>(), Nan::UTF8, &bc, NULL, 0, 0);
+
 	int i = (int)args[1]->Int32Value();
 
 	add_column(obj->lp, NULL);
 	set_col_name(obj->lp, i, col_string);
 
+	delete col_string;
+	
 	NanReturnUndefined();
 }
 
