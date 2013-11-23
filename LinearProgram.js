@@ -7,6 +7,16 @@ function LinearProgram() {
 	this.lp_solve = new lp_solve();
 }
 
+LinearProgram.prototype.setOutputFile = function(fname) {
+	var str = typeof fname !== 'undefined' ? String(fname) : '';
+
+	if (!this.lp_solve.setOutputFile(str)) {
+		throw new Error('error writing to file \'' + str + '\'');
+	}
+
+	return this;
+}
+
 LinearProgram.prototype.addColumn = function(name, isInteger) {
 	
 	var id = this.Columns[name] = Object.keys(this.Columns).length + 1;
