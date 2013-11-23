@@ -45,8 +45,8 @@ void LinearProgram::Init(Handle<Object> exports) {
 	NODE_SET_PROTOTYPE_METHOD(tpl, "getObjectiveValue", LinearProgram::GetObjectiveValue);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "getSolutionVariables", LinearProgram::GetSolutionVariables);
 
-	constructor = Persistent<Function>::New(tpl->GetFunction());
-	exports->Set(String::NewSymbol("LinearProgram"), constructor);
+	NanAssignPersistent(Function, constructor, tpl->GetFunction());
+	exports->Set(String::NewSymbol("LinearProgram"), tpl->GetFunction());
 }
 
 NAN_METHOD(LinearProgram::New) {
@@ -56,19 +56,19 @@ NAN_METHOD(LinearProgram::New) {
 		// Invoked as constructor: `new LinearProgram(...)`
 		LinearProgram* obj = new LinearProgram();
 		obj->Wrap(args.This());
-		return args.This();
+		NanReturnValue(args.This());
 	} else {
 		//Local<Value> argv[0];
-		return scope.Close(constructor->NewInstance(0, NULL));
+		NanReturnValue(NanPersistentToLocal(constructor)->NewInstance(0, NULL));
 	}
 }
 
 LinearProgram::LinearProgram() {
-	lp = make_lp(0, 0);	
+	lp = make_lp(0, 0);
 }
 
 LinearProgram::~LinearProgram() {
-	delete_lp(lp);	
+	delete_lp(lp);
 }
 
 NAN_METHOD(LinearProgram::AddColumn) {
@@ -76,20 +76,20 @@ NAN_METHOD(LinearProgram::AddColumn) {
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(args.This());
 
 	String::Utf8Value utf8str(args[0]);
-	
+
 	char* col_string = (char*) *utf8str;
 	int i = (int)args[1]->Int32Value();
 
 	add_column(obj->lp, NULL);
 	set_col_name(obj->lp, i, col_string);
-  
+
 	NanReturnValue(Number::New(0));
 }
 
 NAN_METHOD(LinearProgram::AddConstraint) {
 	NanScope();
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(args.This());
-  
+
   	// name, rowId, rowValues, constrint type, constant
 
 	Handle<Array> rowId = Handle<Array>::Cast(args[1]);
@@ -112,7 +112,7 @@ NAN_METHOD(LinearProgram::AddConstraint) {
 
 	if (!args[0]->IsUndefined()) {
 		String::Utf8Value utf8str(args[0]);
-	
+
 		char* row_string = (char*) *utf8str;
 
 		set_row_name(obj->lp, get_Nrows(obj->lp), row_string);
@@ -124,7 +124,7 @@ NAN_METHOD(LinearProgram::AddConstraint) {
 NAN_METHOD(LinearProgram::SetObjective) {
 	NanScope();
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(args.This());
-  
+
   	Handle<Array> rowId = Handle<Array>::Cast(args[1]);
 	Handle<Array> rowValue = Handle<Array>::Cast(args[2]);
 
@@ -182,5 +182,3 @@ NAN_METHOD(LinearProgram::GetSolutionVariables) {
 
 	NanReturnValue(ret);
 }
-
-

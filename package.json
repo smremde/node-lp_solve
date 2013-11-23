@@ -12,7 +12,7 @@
     "keywords": [ "lp_solve", "linear programming", "lpsolve" ], 
     "dependencies": {
         "bindings": "~1.1.1", 
-        "nan": "~0.5.0"
+        "nan": "~0.6.0"
     }, 
     "license": "LGPL", 
     "gypfile": true,
