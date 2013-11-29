@@ -31,6 +31,7 @@ lp.addConstraint(machinebtime, 'LE', 2100, 'machine b time')
 lp.addConstraint(new Row().Add(x, 1), 'GE', 75 - 30, 'meet demand of x')
 lp.addConstraint(new Row().Add(y, 1), 'GE', 95 - 90, 'meet demand of y')
 
+console.log(lp.dumpProgram());
 console.log(lp.solve());
 console.log('objective =', lp.getObjective())
 console.log('x =', lp.get(x));
@@ -43,6 +44,13 @@ console.log('machinebtime =', lp.calculate(machinebtime));
 Output
 
 ```
+minimize: +1 x +1 y
+subject to
+machine a time:  +50 x +24 y <= 2400
+machine b time:  +30 x +33 y <= 2100
+meet demand of x:  +1 x >= 45
+meet demand of y:  +1 y >= 5
+
 Model name:  '' - run #1
 Objective:   Minimize(R0)
 

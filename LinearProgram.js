@@ -1,10 +1,12 @@
 'use strict'
 var lp_solve = require('bindings')('lp_solve').LinearProgram;
-
+var Row = require('./Row.Js');
 
 function LinearProgram() {
 	this.Columns = { };
 	this.lp_solve = new lp_solve();
+	this.Constraints = [];
+	this.ObjectiveFunc = new Row();
 }
 
 LinearProgram.prototype.setOutputFile = function(fname) {
@@ -35,6 +37,7 @@ LinearProgram.prototype.addColumn = function(name, isInteger) {
 }
 
 LinearProgram.ConstraintTypes = {'LE':1,'EQ':3,'GE':2};
+LinearProgram.ConstraintText = {'LE':'<=','EQ':'=','GE':'>='};
 
 LinearProgram.prototype.addConstraint = function(row, constraint, constant, name) {
 	var rowId = [];
@@ -51,6 +54,8 @@ LinearProgram.prototype.addConstraint = function(row, constraint, constant, name
 	}
 
 	var constrainttype = LinearProgram.ConstraintTypes[constraint];
+
+	this.Constraints.push({ name: name, row: row.ToText(), constraint: constraint, constant: constant });
 
 	return this.lp_solve.addConstraint(name, rowId, rowValues, constrainttype, constant);
 }
@@ -70,6 +75,8 @@ LinearProgram.prototype.setObjective = function(row, minimize) {
 	}
 
 	if (minimize === undefined) minimize = true;
+
+	this.ObjectiveFunc = { minimize: minimize, row: row };
 
 	return this.lp_solve.setObjective(minimize, rowId, rowValues);
 }
@@ -121,6 +128,16 @@ LinearProgram.prototype.calculate = function(row) {
 LinearProgram.prototype.get = function(variable) {
 	if (variable == 'constant') return 1;
 	return this.solutionVariables[this.Columns[variable] - 1];
+}
+
+LinearProgram.prototype.dumpProgram = function() {
+	var ret = (this.ObjectiveFunc.minimize ? 'minimize' : 'maximize') + ':' + this.ObjectiveFunc.row.ToText() + '\n';
+	ret += "subject to\n"
+	for (var v in this.Constraints) {
+		var c = this.Constraints[v];
+		ret += (c.name ? (c.name + ': '): '') + c.row + ' ' + LinearProgram.ConstraintText[c.constraint] + ' ' + c.constant + '\n';
+	}
+	return ret;
 }
 
 module.exports = LinearProgram;
