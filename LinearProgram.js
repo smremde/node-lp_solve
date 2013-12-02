@@ -1,6 +1,6 @@
 'use strict'
 var lp_solve = require('bindings')('lp_solve').LinearProgram;
-var Row = require('./Row.Js');
+var Row = require('./Row.js');
 
 function LinearProgram() {
 	this.Columns = { };
