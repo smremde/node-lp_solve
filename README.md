@@ -33,7 +33,7 @@ lp.addConstraint(new Row().Add(y, 1), 'GE', 95 - 90, 'meet demand of y')
 
 console.log(lp.dumpProgram());
 console.log(lp.solve());
-console.log('objective =', lp.getObjective())
+console.log('objective =', lp.getObjectiveValue())
 console.log('x =', lp.get(x));
 console.log('y =', lp.get(y));
 console.log('machineatime =', lp.calculate(machineatime));
