@@ -131,11 +131,10 @@ LinearProgram.prototype.get = function(variable) {
 }
 
 LinearProgram.prototype.dumpProgram = function() {
-	var ret = (this.ObjectiveFunc.minimize ? 'minimize' : 'maximize') + ':' + this.ObjectiveFunc.row.ToText() + '\n';
-	ret += "subject to\n"
+	var ret = (this.ObjectiveFunc.minimize ? 'minimize' : 'maximize') + ':' + this.ObjectiveFunc.row.ToText() + ';\n';
 	for (var v in this.Constraints) {
 		var c = this.Constraints[v];
-		ret += (c.name ? (c.name + ': '): '') + c.row + ' ' + LinearProgram.ConstraintText[c.constraint] + ' ' + c.constant + '\n';
+		ret += (c.name ? (c.name + ': '): '') + c.row + ' ' + LinearProgram.ConstraintText[c.constraint] + ' ' + c.constant + ';\n';
 	}
 	return ret;
 }
