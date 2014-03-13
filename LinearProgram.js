@@ -19,8 +19,8 @@ LinearProgram.prototype.setOutputFile = function(fname) {
 	return this;
 }
 
-LinearProgram.prototype.addColumn = function(name, isInteger) {
-	
+LinearProgram.prototype.addColumn = function(name, isInteger, isBinary) {
+
 	var id = this.Columns[name] = Object.keys(this.Columns).length + 1;
 
 	if (name === undefined) {
@@ -32,6 +32,10 @@ LinearProgram.prototype.addColumn = function(name, isInteger) {
 	if (isInteger === true) {
 		this.lp_solve.setColumnInteger(id, true);
 	}
+
+  if (isBinary === true) {
+    this.lp_solve.setColumnBinary(id, true);
+  }
 
 	return name;
 }
@@ -102,9 +106,9 @@ LinearProgram.SolveResult = {
 LinearProgram.prototype.solve = function() {
 	var res = this.lp_solve.solve();
 
-	if (res == 0 || res == 1 || res ==9) 
+	if (res == 0 || res == 1 || res ==9)
 		this.solutionVariables = this.getSolutionVariables();
-	
+
 	return { code: res, description: LinearProgram.SolveResult[res] };
 }
 
