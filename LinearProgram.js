@@ -1,4 +1,6 @@
-'use strict'
+/* jslint node: true */
+'use strict';
+
 var lp_solve = require('bindings')('lp_solve').LinearProgram;
 var Row = require('./Row.js');
 
@@ -17,7 +19,7 @@ LinearProgram.prototype.setOutputFile = function(fname) {
 	}
 
 	return this;
-}
+};
 
 LinearProgram.prototype.addColumn = function(name, isInteger, isBinary) {
 
@@ -33,12 +35,12 @@ LinearProgram.prototype.addColumn = function(name, isInteger, isBinary) {
 		this.lp_solve.setColumnInteger(id, true);
 	}
 
-  if (isBinary === true) {
-    this.lp_solve.setColumnBinary(id, true);
-  }
+	if (isBinary === true) {
+		this.lp_solve.setColumnBinary(id, true);
+	}
 
 	return name;
-}
+};
 
 LinearProgram.ConstraintTypes = {'LE':1,'EQ':3,'GE':2};
 LinearProgram.ConstraintText = {'LE':'<=','EQ':'=','GE':'>='};
@@ -62,7 +64,7 @@ LinearProgram.prototype.addConstraint = function(row, constraint, constant, name
 	this.Constraints.push({ name: name, row: row.ToText(), constraint: constraint, constant: constant });
 
 	return this.lp_solve.addConstraint(name, rowId, rowValues, constrainttype, constant);
-}
+};
 
 LinearProgram.prototype.setObjective = function(row, minimize) {
 	var rowId = [];
@@ -83,7 +85,7 @@ LinearProgram.prototype.setObjective = function(row, minimize) {
 	this.ObjectiveFunc = { minimize: minimize, row: row };
 
 	return this.lp_solve.setObjective(minimize, rowId, rowValues);
-}
+};
 
 LinearProgram.SolveResult = {
 	'-5': 'UNKNOWNERROR',
@@ -106,19 +108,19 @@ LinearProgram.SolveResult = {
 LinearProgram.prototype.solve = function() {
 	var res = this.lp_solve.solve();
 
-	if (res == 0 || res == 1 || res ==9)
+	if (res === 0 || res == 1 || res == 9)
 		this.solutionVariables = this.getSolutionVariables();
 
 	return { code: res, description: LinearProgram.SolveResult[res] };
-}
+};
 
 LinearProgram.prototype.getObjectiveValue = function() {
 	return this.lp_solve.getObjectiveValue() + (this.adjustObjective || 0);
-}
+};
 
 LinearProgram.prototype.getSolutionVariables = function() {
 	return this.lp_solve.getSolutionVariables();
-}
+};
 
 LinearProgram.prototype.calculate = function(row) {
 	var val = 0;
@@ -127,12 +129,12 @@ LinearProgram.prototype.calculate = function(row) {
 		val += this.get(k) * raw[k];
 	}
 	return val;
-}
+};
 
 LinearProgram.prototype.get = function(variable) {
 	if (variable == 'constant') return 1;
 	return this.solutionVariables[this.Columns[variable] - 1];
-}
+};
 
 LinearProgram.prototype.dumpProgram = function() {
 	var ret = (this.ObjectiveFunc.minimize ? 'minimize' : 'maximize') + ':' + this.ObjectiveFunc.row.ToText() + ';\n';
@@ -141,6 +143,6 @@ LinearProgram.prototype.dumpProgram = function() {
 		ret += (c.name ? (c.name + ': '): '') + c.row + ' ' + LinearProgram.ConstraintText[c.constraint] + ' ' + c.constant + ';\n';
 	}
 	return ret;
-}
+};
 
 module.exports = LinearProgram;

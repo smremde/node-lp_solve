@@ -41,7 +41,7 @@ void LinearProgram::Init(Handle<Object> exports) {
 	NODE_SET_PROTOTYPE_METHOD(tpl, "setOutputFile", LinearProgram::SetOutputFile);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "addColumn", LinearProgram::AddColumn);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "setColumnInteger", LinearProgram::SetColumnInteger);
-  NODE_SET_PROTOTYPE_METHOD(tpl, "setColumnBinary", LinearProgram::SetColumnBinary);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "setColumnBinary", LinearProgram::SetColumnBinary);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "addConstraint", LinearProgram::AddConstraint);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "setObjective", LinearProgram::SetObjective);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "solve", LinearProgram::Solve);
@@ -123,15 +123,15 @@ NAN_METHOD(LinearProgram::SetColumnInteger) {
 }
 
 NAN_METHOD(LinearProgram::SetColumnBinary) {
-  NanScope();
-  LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(args.This());
+	NanScope();
+	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(args.This());
 
-  int columnId = Handle<Number>::Cast(args[0])->Int32Value();
-  bool isBinary = Handle<Array>::Cast(args[1])->BooleanValue();
+	int columnId = Handle<Number>::Cast(args[0])->Int32Value();
+	bool isBinary = Handle<Array>::Cast(args[1])->BooleanValue();
 
-    set_binary(obj->lp, columnId, isBinary);
+	set_binary(obj->lp, columnId, isBinary);
 
-  NanReturnUndefined();
+	NanReturnUndefined();
 }
 
 NAN_METHOD(LinearProgram::AddConstraint) {

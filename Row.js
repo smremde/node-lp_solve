@@ -1,4 +1,5 @@
-'use strict'
+/* jslint node: true */
+'use strict';
 
 // class to hold factor:attribute pairs
 function Row(clone) {
@@ -7,9 +8,9 @@ function Row(clone) {
 	if (clone) {
 		if (clone.raw) clone = clone.raw;
 		for (var k in clone)
-   			this.raw[k] = clone[k];	
-   	}
-};
+			this.raw[k] = clone[k];
+	}
+}
 
 // adds a row or a variable:factor to this row
 Row.prototype.Add = function(b, c) {
@@ -23,7 +24,7 @@ Row.prototype.Add = function(b, c) {
 		a[b] = (a[b] || 0) + c;
 	}
 	return this;
-}
+};
 
 // subtract a row or variable:factor to this row
 Row.prototype.Subtract = function(b, c) {
@@ -37,12 +38,12 @@ Row.prototype.Subtract = function(b, c) {
 		a[b] = (a[b] || 0) - c;
 	}
 	return this;
-}
+};
 
 // multiplies all the factors by a fixed value
 Row.prototype.Multiply = function(v) {
 	var a = this.raw;
-	if (v == 0) {
+	if (v === 0) {
 		this.raw = {};
 	} else {
 		for (var k in a) {
@@ -51,7 +52,7 @@ Row.prototype.Multiply = function(v) {
 	}
 
 	return this;
-}
+};
 
 // converts an object of vairable:factor to an equation for LP Solve
 Row.prototype.ToText  = function() {
@@ -59,8 +60,8 @@ Row.prototype.ToText  = function() {
 	var ret = "";
 	for (var k in a) {
 		var v = a[k];
-		if (v == 0) 
-			continue;			
+		if (v === 0)
+			continue;
 		if (v < 0) {
 			ret += " -";
 			v = -v;
@@ -69,12 +70,12 @@ Row.prototype.ToText  = function() {
 		}
 		if (k === 'constant') {
 			ret += v;
-		} else { 
+		} else {
 			ret += v + " " + k;
 		}
 	}
-	return ret == "" ? "0" : ret;	
-}
+	return (ret === "") ? "0" : ret;
+};
 
 
 module.exports = Row;

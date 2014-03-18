@@ -15,7 +15,7 @@ var Row = lpsolve.Row;
 var lp = new lpsolve.LinearProgram();
 
 var x = lp.addColumn('x'); // lp.addColumn('x', true) for integer variable
-var y = lp.addColumn('y');
+var y = lp.addColumn('y'); // lp.addColumn('y', false, true) for binary variable
 
 
 var objective = new Row().Add(x, 1).Add(y, 1);
