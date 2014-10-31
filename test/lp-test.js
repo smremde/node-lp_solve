@@ -106,7 +106,8 @@ test('lp async', {timeout:10000000}, function (t) {
             });
           })(lps[i + batch * count]);
         }
-      }, batch * 10);
+
+      }, 0);
     })(batch);
   };
 

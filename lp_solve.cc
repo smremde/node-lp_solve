@@ -204,7 +204,7 @@ class SolveWorker : public NanAsyncWorker {
 
 	void Execute() {
 	  	int res = solve(lp);
-	  	// printf("solve %i\n", res);
+	  	printf("solve %i\n", res);
 	}
 
 	void HandleOKCallback() {
