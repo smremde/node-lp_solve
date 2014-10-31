@@ -31,6 +31,7 @@ private:
 	static NAN_METHOD(SetObjective);
 	static NAN_METHOD(GetObjectiveValue);
 	static NAN_METHOD(Solve);
+	static NAN_METHOD(SolveAsync);
 	static NAN_METHOD(GetSolutionVariables);
 
 	lprec* lp;

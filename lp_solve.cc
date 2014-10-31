@@ -7,8 +7,8 @@
 using namespace v8;
 
 void InitAll(Handle<Object> exports) {
-	exports->Set(NanSymbol("getVersion"),
-		FunctionTemplate::New(getVersion)->GetFunction());
+	exports->Set(NanNew<String>("getVersion"),
+		NanNew<FunctionTemplate>(getVersion)->GetFunction());
 	LinearProgram::Init(exports);
 }
 
@@ -24,18 +24,18 @@ NAN_METHOD(getVersion) {
 
 	Handle<Object> ret = Object::New();
 
-	ret->Set(NanSymbol("majorversion"), Number::New(majorversion));
-	ret->Set(NanSymbol("minorversion"), Number::New(minorversion));
-	ret->Set(NanSymbol("release"), Number::New(release));
-	ret->Set(NanSymbol("build"), Number::New(build));
+	ret->Set(NanNew<String>("majorversion"), Number::New(majorversion));
+	ret->Set(NanNew<String>("minorversion"), Number::New(minorversion));
+	ret->Set(NanNew<String>("release"), Number::New(release));
+	ret->Set(NanNew<String>("build"), Number::New(build));
 
 	NanReturnValue(ret);
 };
 
 
 void LinearProgram::Init(Handle<Object> exports) {
-	Local<FunctionTemplate> tpl = FunctionTemplate::New(LinearProgram::New);
-	tpl->SetClassName(NanSymbol("LinearProgram"));
+	Local<FunctionTemplate> tpl = NanNew<v8::FunctionTemplate>(LinearProgram::New);
+	tpl->SetClassName(NanNew<String>("LinearProgram"));
 	tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
 	NODE_SET_PROTOTYPE_METHOD(tpl, "setOutputFile", LinearProgram::SetOutputFile);
@@ -45,43 +45,32 @@ void LinearProgram::Init(Handle<Object> exports) {
 	NODE_SET_PROTOTYPE_METHOD(tpl, "addConstraint", LinearProgram::AddConstraint);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "setObjective", LinearProgram::SetObjective);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "solve", LinearProgram::Solve);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "solveAsync", LinearProgram::SolveAsync);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "getObjectiveValue", LinearProgram::GetObjectiveValue);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "getSolutionVariables", LinearProgram::GetSolutionVariables);
 
-	NanAssignPersistent(Function, constructor, tpl->GetFunction());
 	exports->Set(String::NewSymbol("LinearProgram"), tpl->GetFunction());
 }
 
 NAN_METHOD(LinearProgram::New) {
 	NanScope();
 
-	if (args.IsConstructCall()) {
-		// Invoked as constructor: `new LinearProgram(...)`
-		LinearProgram* obj = new LinearProgram();
-		obj->Wrap(args.This());
-		NanReturnValue(args.This());
-	} else {
-		//Local<Value> argv[0];
-		NanReturnValue(NanPersistentToLocal(constructor)->NewInstance(0, NULL));
-	}
+	LinearProgram* obj = new LinearProgram();
+	obj->Wrap(args.This());
+	NanReturnValue(args.This());
 }
 
 NAN_METHOD(LinearProgram::SetOutputFile) {
 	NanScope();
 
-	assert(args[0]->IsString());
-
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(args.This());
 
-	size_t bc;
+	String::Utf8Value str(args[0]);
+	char* path = *str;
 
-	char *s = NanFromV8String(args[0].As<String>(), Nan::UTF8, &bc, NULL, 0, 0);
+	int res = set_outputfile(obj->lp, path);
 
-	Local<Boolean> res = NanNewLocal<Boolean>(Boolean::New(set_outputfile(obj->lp, s)));
-
-	delete[] s;
-
-	NanReturnValue(res);
+	NanReturnValue(NanNew<Boolean>(res == 1));
 }
 
 LinearProgram::LinearProgram() {
@@ -94,18 +83,19 @@ LinearProgram::~LinearProgram() {
 
 NAN_METHOD(LinearProgram::AddColumn) {
 	NanScope();
+
+	assert(args[0]->IsString());
+	assert(args[1]->IsNumber());
+
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(args.This());
 
-	size_t bc;
-
-	char *col_string = NanFromV8String(args[0].As<String>(), Nan::UTF8, &bc, NULL, 0, 0);
+	String::Utf8Value str(args[0]);
+	char* col_string = *str;
 
 	int i = (int)args[1]->Int32Value();
 
 	add_column(obj->lp, NULL);
 	set_col_name(obj->lp, i, col_string);
-
-	delete col_string;
 
 	NanReturnUndefined();
 }
@@ -159,9 +149,9 @@ NAN_METHOD(LinearProgram::AddConstraint) {
 	add_constraintex(obj->lp, n, _rowValue, _rowId, constr_type, rh);
 
 	if (!args[0]->IsUndefined()) {
-		String::Utf8Value utf8str(args[0]);
 
-		char* row_string = (char*) *utf8str;
+		String::Utf8Value str(args[0]);
+		char* row_string = *str;
 
 		set_row_name(obj->lp, get_Nrows(obj->lp), row_string);
 	}
@@ -202,8 +192,44 @@ NAN_METHOD(LinearProgram::SetObjective) {
 NAN_METHOD(LinearProgram::Solve) {
 	NanScope();
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(args.This());
-  	int res = solve(obj->lp);
+	int res = solve(obj->lp);
 	NanReturnValue(Number::New(res));
+}
+
+class SolveWorker : public NanAsyncWorker {
+	public:
+		SolveWorker(NanCallback *callback, lprec* lp)
+		: NanAsyncWorker(callback), lp(lp) {}
+		~SolveWorker() {}
+
+	void Execute() {
+	  	int res = solve(lp);
+	  	// printf("solve %i\n", res);
+	}
+
+	void HandleOKCallback() {
+		NanScope();
+
+		Local<Value> argv[] = {
+		    NanNull(),
+		    Number::New(res)
+		};
+
+		callback->Call(2, argv);
+	};
+
+	private:
+		lprec* lp;
+		int res;
+};
+
+NAN_METHOD(LinearProgram::SolveAsync) {
+	NanScope();
+	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(args.This());
+  	NanCallback *callback = new NanCallback(args[0].As<Function>());
+
+	NanAsyncQueueWorker(new SolveWorker(callback, obj->lp));
+	NanReturnUndefined();
 }
 
 NAN_METHOD(LinearProgram::GetObjectiveValue) {
