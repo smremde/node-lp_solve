@@ -8,5 +8,6 @@ var LinearProgram = require('./LinearProgram.js');
 module.exports = {
 	Row: Row,
 	LinearProgram: LinearProgram,
+	lp_solve: lp_solve,
 	version: lp_solve.lp_solve_version()
 };

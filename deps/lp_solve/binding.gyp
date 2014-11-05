@@ -10,7 +10,7 @@
                 'RoleIsExternalInvEngine'
             ],
             'include_dirs': [
-                'lp_solve_5.5', 
+                'lp_solve_5.5',
                 'lp_solve_5.5/shared',
                 'lp_solve_5.5/bfp',
                 'lp_solve_5.5/bfp/bfp_LUSOL',

@@ -11,8 +11,17 @@
                "<!(node -e \"require('nan')\")"
             ],
             'sources': [
-                'lp_solve.cc', 
+                'lp_solve.cc',
             ],
         }
-    ]
+    ],
+    'configurations': {
+        'Release': {
+            'msvs_settings': {
+                'VCCLCompilerTool': {
+                    'ExceptionHandling': 1
+                }
+            }
+        }
+    }
 }

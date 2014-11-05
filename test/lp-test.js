@@ -1,20 +1,20 @@
 var test = require('tap').test,
   lpsolve = require('../index.js');
 
-test('lp', function (t) {
-  t.plan(16);
-  t.type(lpsolve, 'object');
+//test('lp', function (t) {
+  //t.plan(16);
+  //t.type(lpsolve, 'object');
 
   var Row = lpsolve.Row;
-  t.type(Row, 'function');
+  //t.type(Row, 'function');
 
   var lp = new lpsolve.LinearProgram();
   var lp2 = new lpsolve.LinearProgram();
-  t.doesNotThrow(function () {lp.setOutputFile('');});
-  t.doesNotThrow(function () {lp2.setOutputFile('');});
+  //t.doesNotThrow(function () {lp.setOutputFile('');});
+  //t.doesNotThrow(function () {lp2.setOutputFile('');});
 
-  t.type(lp, 'object');
-  t.type(lp2, 'object');
+  //t.type(lp, 'object');
+  //t.type(lp2, 'object');
 
   var x = lp.addColumn('x');
   var y = lp.addColumn('y');
@@ -45,23 +45,23 @@ test('lp', function (t) {
   lp.solve();
   lp2.solve();
 
-  t.equals(lp.getObjectiveValue(), 50);
-  t.equals(lp.get(x), 45);
-  t.equals(lp.get(y), 5);
-  t.equals(lp.calculate(machineatime), 2370);
-  t.equals(lp.calculate(machinebtime), 1515);
+  //t.equals(lp.getObjectiveValue(), 50);
+//  t.equals(lp.get(x), 45);
+  //t.equals(lp.get(y), 5);
+  //t.equals(lp.calculate(machineatime), 2370);
+  //t.equals(lp.calculate(machinebtime), 1515);
 
-  t.equals(lp2.getObjectiveValue(), 50);
-  t.equals(lp2.get(x2), 45);
-  t.equals(lp2.get(y2), 5);
-  t.equals(lp2.calculate(machineatime2), 2370);
-  t.equals(lp2.calculate(machinebtime2), 1515);
+  //t.equals(lp2.getObjectiveValue(), 50);
+  //t.equals(lp2.get(x2), 45);
+  //t.equals(lp2.get(y2), 5);
+  //t.equals(lp2.calculate(machineatime2), 2370);
+  //t.equals(lp2.calculate(machinebtime2), 1515);
 
-});
+//});
 
 var lps = [];
-var count = 2;
-var batches = 2;
+var count = 20;
+var batches = 20;
 
 test('lp async', {timeout:10000000}, function (t) {
 

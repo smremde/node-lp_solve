@@ -20,6 +20,34 @@ void InitAll(Handle<Object> exports) {
 	// exports->Set(NanNew<String>("read_lpex"), NanNew<FunctionTemplate>(read_lpex)->GetFunction());
 	// exports->Set(NanNew<String>("read_mpsex"), NanNew<FunctionTemplate>(read_mpsex)->GetFunction());
 	// exports->Set(NanNew<String>("read_freempsex"), NanNew<FunctionTemplate>(read_freempsex)->GetFunction());
+	Local<Object> PRESOLVE = NanNew<Object>();
+
+	PRESOLVE->Set(NanNew<String>("PRESOLVE_NONE"), NanNew<Number>(0), static_cast<v8::PropertyAttribute>(v8::ReadOnly));
+	PRESOLVE->Set(NanNew<String>("PRESOLVE_ROWS"), NanNew<Number>(1), static_cast<v8::PropertyAttribute>(v8::ReadOnly));
+	PRESOLVE->Set(NanNew<String>("PRESOLVE_COLS"), NanNew<Number>(2), static_cast<v8::PropertyAttribute>(v8::ReadOnly));
+	PRESOLVE->Set(NanNew<String>("PRESOLVE_LINDEP"), NanNew<Number>(4), static_cast<v8::PropertyAttribute>(v8::ReadOnly));
+	PRESOLVE->Set(NanNew<String>("PRESOLVE_AGGREGATE"), NanNew<Number>(8), static_cast<v8::PropertyAttribute>(v8::ReadOnly));  /* Not implemented */
+	PRESOLVE->Set(NanNew<String>("PRESOLVE_SPARSER"), NanNew<Number>(16), static_cast<v8::PropertyAttribute>(v8::ReadOnly));  /* Not implemented */
+	PRESOLVE->Set(NanNew<String>("PRESOLVE_SOS"), NanNew<Number>(32), static_cast<v8::PropertyAttribute>(v8::ReadOnly));
+	PRESOLVE->Set(NanNew<String>("PRESOLVE_REDUCEMIP"), NanNew<Number>(64), static_cast<v8::PropertyAttribute>(v8::ReadOnly));
+	PRESOLVE->Set(NanNew<String>("PRESOLVE_KNAPSACK"), NanNew<Number>(128), static_cast<v8::PropertyAttribute>(v8::ReadOnly));  /* Implementation not tested completely */
+	PRESOLVE->Set(NanNew<String>("PRESOLVE_ELIMEQ2"), NanNew<Number>(256), static_cast<v8::PropertyAttribute>(v8::ReadOnly));
+	PRESOLVE->Set(NanNew<String>("PRESOLVE_IMPLIEDFREE"), NanNew<Number>(512), static_cast<v8::PropertyAttribute>(v8::ReadOnly));
+	PRESOLVE->Set(NanNew<String>("PRESOLVE_REDUCEGCD"), NanNew<Number>(1024), static_cast<v8::PropertyAttribute>(v8::ReadOnly));
+	PRESOLVE->Set(NanNew<String>("PRESOLVE_PROBEFIX"), NanNew<Number>(2048), static_cast<v8::PropertyAttribute>(v8::ReadOnly));
+	PRESOLVE->Set(NanNew<String>("PRESOLVE_PROBEREDUCE"), NanNew<Number>(4096), static_cast<v8::PropertyAttribute>(v8::ReadOnly));
+	PRESOLVE->Set(NanNew<String>("PRESOLVE_ROWDOMINATE"), NanNew<Number>(8192), static_cast<v8::PropertyAttribute>(v8::ReadOnly));
+	PRESOLVE->Set(NanNew<String>("PRESOLVE_COLDOMINATE"), NanNew<Number>(16384), static_cast<v8::PropertyAttribute>(v8::ReadOnly));  /* Reduced functionality, should be expanded */
+	PRESOLVE->Set(NanNew<String>("PRESOLVE_MERGEROWS"), NanNew<Number>(32768), static_cast<v8::PropertyAttribute>(v8::ReadOnly));
+	PRESOLVE->Set(NanNew<String>("PRESOLVE_IMPLIEDSLK"), NanNew<Number>(65536), static_cast<v8::PropertyAttribute>(v8::ReadOnly));
+	PRESOLVE->Set(NanNew<String>("PRESOLVE_COLFIXDUAL"), NanNew<Number>(131072), static_cast<v8::PropertyAttribute>(v8::ReadOnly));
+	PRESOLVE->Set(NanNew<String>("PRESOLVE_BOUNDS"), NanNew<Number>(262144), static_cast<v8::PropertyAttribute>(v8::ReadOnly));
+	PRESOLVE->Set(NanNew<String>("PRESOLVE_LASTMASKMODE"), NanNew<Number>(524288 - 1), static_cast<v8::PropertyAttribute>(v8::ReadOnly));
+	PRESOLVE->Set(NanNew<String>("PRESOLVE_DUALS"), NanNew<Number>(524288), static_cast<v8::PropertyAttribute>(v8::ReadOnly));
+	PRESOLVE->Set(NanNew<String>("PRESOLVE_SENSDUALS"), NanNew<Number>(1048576), static_cast<v8::PropertyAttribute>(v8::ReadOnly));
+
+	exports->Set(NanNew<String>("PRESOLVE"), PRESOLVE);
+
 	LinearProgram::Init(exports);
 }
 
@@ -290,10 +318,9 @@ void LinearProgram::Init(Handle<Object> exports) {
 	NODE_SET_PROTOTYPE_METHOD(tpl, "get_Ncolumns", LinearProgram::get_Ncolumns);
 //  NODE_SET_PROTOTYPE_METHOD(tpl, "write_lpex", LinearProgram::write_lpex);
 //  NODE_SET_PROTOTYPE_METHOD(tpl, "MPS_writefileex", LinearProgram::MPS_writefileex);
-	constructor = Persistent<Function>::New(tpl->GetFunction());
-//	exports->Set(String::NewSymbol("LinearProgram"), tpl->GetFunction());
-}
 
+	NanAssignPersistent(constructor, tpl->GetFunction());
+}
 
 LinearProgram::LinearProgram() {
 }
@@ -319,7 +346,7 @@ public:
 
 	void Execute() {
 		int res = solve(lp);
-		printf("solve %i\n", res);
+		// printf("solve %i\n", res);
 	}
 
 	void HandleOKCallback() {
