@@ -82,3 +82,5 @@ y = 5
 machineatime = 2370
 machinebtime = 1515
 ```
+
+Access to the full lp_solve api is available through lp.lprec - some functions have not been checked and may not work as expected.
