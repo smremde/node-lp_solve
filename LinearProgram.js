@@ -30,7 +30,7 @@ LinearProgram.prototype.addColumn = function(name, isInteger, isBinary) {
 		name = "unamed_" + id;
 	}
 
-	console.log(name, isInteger, isBinary);
+	//console.log(name, isInteger, isBinary);
 	this.lprec.add_column(null);
 
 	this.lprec.set_col_name(id, name);
@@ -124,15 +124,15 @@ LinearProgram.prototype.solve = function() {
 
 LinearProgram.prototype.solveAsync = function(callback) {
 	var that = this;
-	semaphore.take(function() {
+	//semaphore.take(function() {
 		that.lprec.solve_async(function (err, res) {
-			semaphore.leave();
+			//semaphore.leave();
 			if (res === 0 || res == 1 || res == 9)
 				that.solutionVariables = that.getSolutionVariables();
 
 			callback({ code: res, description: LinearProgram.SolveResult[res] });
 		});
-	});
+	//});
 };
 
 LinearProgram.prototype.getObjectiveValue = function() {

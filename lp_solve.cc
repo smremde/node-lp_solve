@@ -327,7 +327,9 @@ LinearProgram::LinearProgram() {
 
 
 LinearProgram::~LinearProgram() {
-	::delete_lp(this->lp);
+	if (this->lp) {
+		::delete_lp(this->lp);
+	}
 }
 
 NAN_METHOD(LinearProgram::New) {

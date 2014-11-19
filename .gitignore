@@ -20,3 +20,4 @@ deps/lp_solve/binding.sln
 deps/lp_solve/lp_solve_5.5.vcxproj
 deps/lp_solve/lp_solve_5.5.vcxproj.filters
 
+outputjs
