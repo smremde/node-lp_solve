@@ -122,6 +122,27 @@ LinearProgram.prototype.solve = function() {
 	return { code: res, description: LinearProgram.SolveResult[res] };
 };
 
+// sets the amount of information to be reported by solve
+LinearProgram.prototype.setVerbose = function(verb) {
+	// when setVerbose is called without arguments, set the default verbose level (4)
+	verb = typeof verb !== 'undefined' ? verb : 4;
+	var ret = {verbosity: verb };
+	
+	switch (verb) {
+		case 0:
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+		case 5:
+		case 6: this.lprec.set_verbose(verb);
+			break;
+		default: ret.errorMsg = "Argument outside of allowed range {0, 1, 2, ..., 6}";
+			break;
+	}
+	return ret;
+};
+
 LinearProgram.prototype.solveAsync = function(callback) {
 	var that = this;
 	//semaphore.take(function() {
