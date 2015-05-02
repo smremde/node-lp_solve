@@ -24,7 +24,7 @@
   "scripts": {
     "test": "tap test/*-test.js"
   },
-  "license": "LGPL",
+  "license": "LGPL-3.0",
   "gypfile": true,
   "main": "index"
 }
