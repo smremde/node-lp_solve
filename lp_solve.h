@@ -20,7 +20,7 @@ NAN_METHOD(read_LP);
 // NAN_METHOD(read_mpsex);
 // NAN_METHOD(read_freempsex);
 
-Persistent<Function> constructor;
+Nan::Persistent<Function> constructor;
 
 class LinearProgram : public node::ObjectWrap {
 
