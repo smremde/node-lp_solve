@@ -173,7 +173,7 @@ private:
 	static NAN_METHOD(set_outputfile);
 	static NAN_METHOD(set_verbose);
 	static NAN_METHOD(get_verbose);
-	// static NAN_METHOD(set_timeout);
+	static NAN_METHOD(set_timeout);
 	static NAN_METHOD(get_timeout);
 	static NAN_METHOD(set_print_sol);
 	static NAN_METHOD(get_print_sol);

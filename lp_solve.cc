@@ -2189,17 +2189,13 @@ NAN_METHOD(LinearProgram::get_verbose) {
 	int ret = ::get_verbose(obj->lp);
 	info.GetReturnValue().Set(Nan::New<Number>(ret));
 }
-/*
-set_timeout
-long,sectimeout
-*/
-/*
 NAN_METHOD(LinearProgram::set_timeout) {
-if (info.Length() != 1) return Nan::ThrowError("Invalid number of arguments");
-LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
-::set_timeout(obj->lp, sectimeout);
+	if (info.Length() != 1) return Nan::ThrowError("Invalid number of arguments");
+	if (!(info[0]->IsNumber())) return Nan::ThrowTypeError("First argument should be a Number");
+	long sectimeout = (long)(info[0]->IntegerValue());
+	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
+	::set_timeout(obj->lp, sectimeout);
 }
-*/
 NAN_METHOD(LinearProgram::get_timeout) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
