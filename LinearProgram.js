@@ -40,7 +40,7 @@ LinearProgram.prototype.addColumn = function(name, isInteger, isBinary) {
 	}
 
 	if (isBinary === true) {
-		this.lprec.set_bool(id, true);
+		this.lprec.set_binary(id, true);
 	}
 
 	return name;
