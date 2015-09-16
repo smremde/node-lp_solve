@@ -1,6 +1,17 @@
 var test = require('tap').test,
   lpsolve = require('../index.js');
 
+test('lp timeout', function (t) {
+  t.plan(3);
+  var lp = new lpsolve.LinearProgram();
+  t.equals(lp.lprec.get_timeout(), 0);
+  lp.lprec.set_timeout(1);
+  t.equals(lp.lprec.get_timeout(), 1);
+  lp.lprec.set_timeout(0);
+  t.equals(lp.lprec.get_timeout(), 0);
+
+});
+
 test('lp', function (t) {
   t.plan(9);
   t.type(lpsolve, 'object');

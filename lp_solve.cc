@@ -2199,7 +2199,8 @@ NAN_METHOD(LinearProgram::set_timeout) {
 NAN_METHOD(LinearProgram::get_timeout) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
-	::get_timeout(obj->lp);
+	long ret = ::get_timeout(obj->lp);
+	info.GetReturnValue().Set(Nan::New<Number>(ret));
 	}
 NAN_METHOD(LinearProgram::set_print_sol) {
 	if (info.Length() != 1) return Nan::ThrowError("Invalid number of arguments");
