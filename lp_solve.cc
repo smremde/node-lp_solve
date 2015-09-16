@@ -423,7 +423,7 @@ NAN_METHOD(LinearProgram::set_obj_in_basis) {
 	MYBOOL obj_in_basis = (MYBOOL)(info[0]->BooleanValue());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_obj_in_basis(obj->lp, obj_in_basis);
-	}
+}
 NAN_METHOD(LinearProgram::copy_lp) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -622,17 +622,17 @@ NAN_METHOD(LinearProgram::set_sense) {
 	MYBOOL maximize = (MYBOOL)(info[0]->BooleanValue());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_sense(obj->lp, maximize);
-	}
+}
 NAN_METHOD(LinearProgram::set_maxim) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_maxim(obj->lp);
-	}
+}
 NAN_METHOD(LinearProgram::set_minim) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_minim(obj->lp);
-	}
+}
 NAN_METHOD(LinearProgram::is_maxim) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -879,7 +879,7 @@ NAN_METHOD(LinearProgram::set_lag_trace) {
 	MYBOOL lag_trace = (MYBOOL)(info[0]->BooleanValue());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_lag_trace(obj->lp, lag_trace);
-	}
+}
 NAN_METHOD(LinearProgram::is_lag_trace) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -1000,7 +1000,7 @@ NAN_METHOD(LinearProgram::set_rh_vec) {
 	if (info[0]->IsArray()) {
 		delete rh;
 	}
-	}
+}
 NAN_METHOD(LinearProgram::str_set_rh_vec) {
 	if (info.Length() != 1) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsString())) return Nan::ThrowTypeError("First argument should be a String");
@@ -1247,7 +1247,7 @@ NAN_METHOD(LinearProgram::set_bounds_tighter) {
 	MYBOOL tighten = (MYBOOL)(info[0]->BooleanValue());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_bounds_tighter(obj->lp, tighten);
-	}
+}
 NAN_METHOD(LinearProgram::get_bounds_tighter) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -1527,7 +1527,7 @@ NAN_METHOD(LinearProgram::add_SOS) {
 	if (info[5]->IsArray()) {
 		delete weights;
 	}
-	}
+}
 NAN_METHOD(LinearProgram::is_SOS_var) {
 	if (info.Length() != 1) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsNumber())) return Nan::ThrowTypeError("First argument should be a Number");
@@ -1594,21 +1594,21 @@ NAN_METHOD(LinearProgram::unscale) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::unscale(obj->lp);
-	}
+}
 NAN_METHOD(LinearProgram::set_preferdual) {
 	if (info.Length() != 1) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsBoolean())) return Nan::ThrowTypeError("First argument should be a Boolean");
 	MYBOOL dodual = (MYBOOL)(info[0]->BooleanValue());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_preferdual(obj->lp, dodual);
-	}
+}
 NAN_METHOD(LinearProgram::set_simplextype) {
 	if (info.Length() != 1) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsNumber())) return Nan::ThrowTypeError("First argument should be a Number");
 	int simplextype = (int)(info[0]->Int32Value());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_simplextype(obj->lp, simplextype);
-	}
+}
 NAN_METHOD(LinearProgram::get_simplextype) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -1619,14 +1619,14 @@ NAN_METHOD(LinearProgram::default_basis) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::default_basis(obj->lp);
-	}
+}
 NAN_METHOD(LinearProgram::set_basiscrash) {
 	if (info.Length() != 1) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsNumber())) return Nan::ThrowTypeError("First argument should be a Number");
 	int mode = (int)(info[0]->Int32Value());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_basiscrash(obj->lp, mode);
-	}
+}
 NAN_METHOD(LinearProgram::get_basiscrash) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -1687,7 +1687,7 @@ NAN_METHOD(LinearProgram::reset_basis) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::reset_basis(obj->lp);
-	}
+}
 NAN_METHOD(LinearProgram::guess_basis) {
 	if (info.Length() != 2) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsArray() || info[0]->IsNull())) return Nan::ThrowTypeError("First argument should be a Array of Numbers or NULL");
@@ -2110,46 +2110,46 @@ NAN_METHOD(LinearProgram::reset_params) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::reset_params(obj->lp);
-	}
+}
 NAN_METHOD(LinearProgram::print_lp) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::print_lp(obj->lp);
-	}
+}
 NAN_METHOD(LinearProgram::print_tableau) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::print_tableau(obj->lp);
-	}
+}
 NAN_METHOD(LinearProgram::print_objective) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::print_objective(obj->lp);
-	}
+}
 NAN_METHOD(LinearProgram::print_solution) {
 	if (info.Length() != 1) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsNumber())) return Nan::ThrowTypeError("First argument should be a Number");
 	int columns = (int)(info[0]->Int32Value());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::print_solution(obj->lp, columns);
-	}
+}
 NAN_METHOD(LinearProgram::print_constraints) {
 	if (info.Length() != 1) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsNumber())) return Nan::ThrowTypeError("First argument should be a Number");
 	int columns = (int)(info[0]->Int32Value());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::print_constraints(obj->lp, columns);
-	}
+}
 NAN_METHOD(LinearProgram::print_duals) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::print_duals(obj->lp);
-	}
+}
 NAN_METHOD(LinearProgram::print_scales) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::print_scales(obj->lp);
-	}
+}
 NAN_METHOD(LinearProgram::print_str) {
 	if (info.Length() != 1) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsString())) return Nan::ThrowTypeError("First argument should be a String");
@@ -2157,7 +2157,7 @@ NAN_METHOD(LinearProgram::print_str) {
 	char* str = *str_str;
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::print_str(obj->lp, str);
-	}
+}
 NAN_METHOD(LinearProgram::set_outputstream) {
 	if (info.Length() != 1) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsString())) return Nan::ThrowTypeError("First argument should be a String");
@@ -2166,7 +2166,7 @@ NAN_METHOD(LinearProgram::set_outputstream) {
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_outputstream(obj->lp, stream);
 	fclose(stream);
-	}
+}
 NAN_METHOD(LinearProgram::set_outputfile) {
 	if (info.Length() != 1) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsString())) return Nan::ThrowTypeError("First argument should be a String");
@@ -2182,7 +2182,7 @@ NAN_METHOD(LinearProgram::set_verbose) {
 	int verbose = (int)(info[0]->Int32Value());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_verbose(obj->lp, verbose);
-	}
+}
 NAN_METHOD(LinearProgram::get_verbose) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -2201,14 +2201,14 @@ NAN_METHOD(LinearProgram::get_timeout) {
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	long ret = ::get_timeout(obj->lp);
 	info.GetReturnValue().Set(Nan::New<Number>(ret));
-	}
+}
 NAN_METHOD(LinearProgram::set_print_sol) {
 	if (info.Length() != 1) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsNumber())) return Nan::ThrowTypeError("First argument should be a Number");
 	int print_sol = (int)(info[0]->Int32Value());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_print_sol(obj->lp, print_sol);
-	}
+}
 NAN_METHOD(LinearProgram::get_print_sol) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -2221,7 +2221,7 @@ NAN_METHOD(LinearProgram::set_debug) {
 	MYBOOL debug = (MYBOOL)(info[0]->BooleanValue());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_debug(obj->lp, debug);
-	}
+}
 NAN_METHOD(LinearProgram::is_debug) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -2234,7 +2234,7 @@ NAN_METHOD(LinearProgram::set_trace) {
 	MYBOOL trace = (MYBOOL)(info[0]->BooleanValue());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_trace(obj->lp, trace);
-	}
+}
 NAN_METHOD(LinearProgram::is_trace) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -2256,7 +2256,7 @@ NAN_METHOD(LinearProgram::set_anti_degen) {
 	int anti_degen = (int)(info[0]->Int32Value());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_anti_degen(obj->lp, anti_degen);
-	}
+}
 NAN_METHOD(LinearProgram::get_anti_degen) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -2279,7 +2279,7 @@ NAN_METHOD(LinearProgram::set_presolve) {
 	int maxloops = (int)(info[1]->Int32Value());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_presolve(obj->lp, presolvemode, maxloops);
-	}
+}
 NAN_METHOD(LinearProgram::get_presolve) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -2322,7 +2322,7 @@ NAN_METHOD(LinearProgram::set_maxpivot) {
 	int max_num_inv = (int)(info[0]->Int32Value());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_maxpivot(obj->lp, max_num_inv);
-	}
+}
 NAN_METHOD(LinearProgram::get_maxpivot) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -2335,7 +2335,7 @@ NAN_METHOD(LinearProgram::set_obj_bound) {
 	REAL obj_bound = (REAL)(info[0]->NumberValue());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_obj_bound(obj->lp, obj_bound);
-	}
+}
 NAN_METHOD(LinearProgram::get_obj_bound) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -2350,7 +2350,7 @@ NAN_METHOD(LinearProgram::set_mip_gap) {
 	REAL mip_gap = (REAL)(info[1]->NumberValue());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_mip_gap(obj->lp, absolute, mip_gap);
-	}
+}
 NAN_METHOD(LinearProgram::get_mip_gap) {
 	if (info.Length() != 1) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsBoolean())) return Nan::ThrowTypeError("First argument should be a Boolean");
@@ -2365,7 +2365,7 @@ NAN_METHOD(LinearProgram::set_bb_rule) {
 	int bb_rule = (int)(info[0]->Int32Value());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_bb_rule(obj->lp, bb_rule);
-	}
+}
 NAN_METHOD(LinearProgram::get_bb_rule) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -2404,7 +2404,7 @@ NAN_METHOD(LinearProgram::set_infinite) {
 	REAL infinite = (REAL)(info[0]->NumberValue());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_infinite(obj->lp, infinite);
-	}
+}
 NAN_METHOD(LinearProgram::get_infinite) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -2417,7 +2417,7 @@ NAN_METHOD(LinearProgram::set_epsint) {
 	REAL epsint = (REAL)(info[0]->NumberValue());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_epsint(obj->lp, epsint);
-	}
+}
 NAN_METHOD(LinearProgram::get_epsint) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -2430,7 +2430,7 @@ NAN_METHOD(LinearProgram::set_epsb) {
 	REAL epsb = (REAL)(info[0]->NumberValue());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_epsb(obj->lp, epsb);
-	}
+}
 NAN_METHOD(LinearProgram::get_epsb) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -2443,7 +2443,7 @@ NAN_METHOD(LinearProgram::set_epsd) {
 	REAL epsd = (REAL)(info[0]->NumberValue());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_epsd(obj->lp, epsd);
-	}
+}
 NAN_METHOD(LinearProgram::get_epsd) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -2456,7 +2456,7 @@ NAN_METHOD(LinearProgram::set_epsel) {
 	REAL epsel = (REAL)(info[0]->NumberValue());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_epsel(obj->lp, epsel);
-	}
+}
 NAN_METHOD(LinearProgram::get_epsel) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -2477,7 +2477,7 @@ NAN_METHOD(LinearProgram::set_scaling) {
 	int scalemode = (int)(info[0]->Int32Value());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_scaling(obj->lp, scalemode);
-	}
+}
 NAN_METHOD(LinearProgram::get_scaling) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -2512,7 +2512,7 @@ NAN_METHOD(LinearProgram::set_scalelimit) {
 	REAL scalelimit = (REAL)(info[0]->NumberValue());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_scalelimit(obj->lp, scalelimit);
-	}
+}
 NAN_METHOD(LinearProgram::get_scalelimit) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -2525,7 +2525,7 @@ NAN_METHOD(LinearProgram::set_improve) {
 	int improve = (int)(info[0]->Int32Value());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_improve(obj->lp, improve);
-	}
+}
 NAN_METHOD(LinearProgram::get_improve) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -2538,7 +2538,7 @@ NAN_METHOD(LinearProgram::set_pivoting) {
 	int piv_rule = (int)(info[0]->Int32Value());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_pivoting(obj->lp, piv_rule);
-	}
+}
 NAN_METHOD(LinearProgram::get_pivoting) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -2597,7 +2597,7 @@ NAN_METHOD(LinearProgram::get_partialprice) {
 	if (info[1]->IsArray()) {
 		delete blockstart;
 	}
-	}
+}
 NAN_METHOD(LinearProgram::set_multiprice) {
 	if (info.Length() != 1) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsNumber())) return Nan::ThrowTypeError("First argument should be a Number");
@@ -2630,7 +2630,7 @@ NAN_METHOD(LinearProgram::set_use_names) {
 	MYBOOL use_names = (MYBOOL)(info[1]->BooleanValue());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_use_names(obj->lp, isrow, use_names);
-	}
+}
 NAN_METHOD(LinearProgram::get_nameindex) {
 	if (info.Length() != 2) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsString())) return Nan::ThrowTypeError("First argument should be a String");
@@ -2664,7 +2664,7 @@ NAN_METHOD(LinearProgram::set_break_at_first) {
 	MYBOOL break_at_first = (MYBOOL)(info[0]->BooleanValue());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_break_at_first(obj->lp, break_at_first);
-	}
+}
 NAN_METHOD(LinearProgram::is_break_at_first) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -2677,7 +2677,7 @@ NAN_METHOD(LinearProgram::set_bb_floorfirst) {
 	int bb_floorfirst = (int)(info[0]->Int32Value());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_bb_floorfirst(obj->lp, bb_floorfirst);
-	}
+}
 NAN_METHOD(LinearProgram::get_bb_floorfirst) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -2690,7 +2690,7 @@ NAN_METHOD(LinearProgram::set_bb_depthlimit) {
 	int bb_maxlevel = (int)(info[0]->Int32Value());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_bb_depthlimit(obj->lp, bb_maxlevel);
-	}
+}
 NAN_METHOD(LinearProgram::get_bb_depthlimit) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -2703,7 +2703,7 @@ NAN_METHOD(LinearProgram::set_break_at_value) {
 	REAL break_at_value = (REAL)(info[0]->NumberValue());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_break_at_value(obj->lp, break_at_value);
-	}
+}
 NAN_METHOD(LinearProgram::get_break_at_value) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -2716,7 +2716,7 @@ NAN_METHOD(LinearProgram::set_negrange) {
 	REAL negrange = (REAL)(info[0]->NumberValue());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_negrange(obj->lp, negrange);
-	}
+}
 NAN_METHOD(LinearProgram::get_negrange) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -2729,7 +2729,7 @@ NAN_METHOD(LinearProgram::set_epsperturb) {
 	REAL epsperturb = (REAL)(info[0]->NumberValue());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_epsperturb(obj->lp, epsperturb);
-	}
+}
 NAN_METHOD(LinearProgram::get_epsperturb) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -2742,7 +2742,7 @@ NAN_METHOD(LinearProgram::set_epspivot) {
 	REAL epspivot = (REAL)(info[0]->NumberValue());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_epspivot(obj->lp, epspivot);
-	}
+}
 NAN_METHOD(LinearProgram::get_epspivot) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -2759,12 +2759,12 @@ NAN_METHOD(LinearProgram::get_total_nodes) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::get_total_nodes(obj->lp);
-	}
+}
 NAN_METHOD(LinearProgram::get_total_iter) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::get_total_iter(obj->lp);
-	}
+}
 NAN_METHOD(LinearProgram::get_objective) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
@@ -3017,7 +3017,7 @@ NAN_METHOD(LinearProgram::set_solutionlimit) {
 	int limit = (int)(info[0]->Int32Value());
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_solutionlimit(obj->lp, limit);
-	}
+}
 NAN_METHOD(LinearProgram::get_solutionlimit) {
 	if (info.Length() != 0) return Nan::ThrowError("Invalid number of arguments");
 	LinearProgram* obj = node::ObjectWrap::Unwrap<LinearProgram>(info.This());
