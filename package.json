@@ -1,7 +1,7 @@
 {
   "name": "lp_solve",
   "description": "A Node.js binding for lp_solve",
-  "version": "0.1.10",
+  "version": "0.2.11",
   "author": {
     "name": "Stephen Remde",
     "email": "smremde@gmail.com"
@@ -17,9 +17,8 @@
   ],
   "dependencies": {
     "bindings": "~1.2.1",
-    "nan": "~1.4.0",
-    "tap": "~0.4.6",
-    "semaphore": "*"
+    "nan": "~2.0.9",
+    "tap": "~0.4.6"
   },
   "scripts": {
     "test": "tap test/*-test.js"
