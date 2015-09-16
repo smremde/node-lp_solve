@@ -214,7 +214,7 @@ void LinearProgram::Init(Handle<Object> exports) {
 	Nan::SetPrototypeMethod(tpl, "set_outputfile", LinearProgram::set_outputfile);
 	Nan::SetPrototypeMethod(tpl, "set_verbose", LinearProgram::set_verbose);
 	Nan::SetPrototypeMethod(tpl, "get_verbose", LinearProgram::get_verbose);
-//  Nan::SetPrototypeMethod(tpl, "set_timeout", LinearProgram::set_timeout);
+  Nan::SetPrototypeMethod(tpl, "set_timeout", LinearProgram::set_timeout);
 	Nan::SetPrototypeMethod(tpl, "get_timeout", LinearProgram::get_timeout);
 	Nan::SetPrototypeMethod(tpl, "set_print_sol", LinearProgram::set_print_sol);
 	Nan::SetPrototypeMethod(tpl, "get_print_sol", LinearProgram::get_print_sol);
