@@ -10,6 +10,10 @@ function LinearProgram() {
 	this.lprec = new lp_solve.make_lp(0, 0);
 	this.Constraints = [];
 	this.ObjectiveFunc = new Row();
+	this.decisionVariableCount = 0;
+	this.modelNames = true;
+	this.localConstraints = true;
+	this.createModel = true;
 }
 
 LinearProgram.prototype.setOutputFile = function(fname) {
@@ -24,23 +28,27 @@ LinearProgram.prototype.setOutputFile = function(fname) {
 
 LinearProgram.prototype.addColumn = function(name, isInteger, isBinary) {
 
-	var id = this.Columns[name] = Object.keys(this.Columns).length + 1;
-
 	if (name === undefined) {
 		name = "unamed_" + id;
 	}
 
-	//console.log(name, isInteger, isBinary);
-	this.lprec.add_column(null);
+	var id = this.Columns[name] =  ++this.decisionVariableCount;
 
-	this.lprec.set_col_name(id, name);
+	if (this.createModel) {
+	
+		this.lprec.add_column(null);
 
-	if (isInteger === true) {
-		this.lprec.set_int(id, true);
-	}
+		if (this.modelNames) {
+			this.lprec.set_col_name(id, name);
+		}
 
-	if (isBinary === true) {
-		this.lprec.set_binary(id, true);
+		if (isInteger === true) {
+			this.lprec.set_int(id, true);
+		}
+
+		if (isBinary === true) {
+			this.lprec.set_binary(id, true);
+		}
 	}
 
 	return name;
@@ -65,12 +73,17 @@ LinearProgram.prototype.addConstraint = function(row, constraint, constant, name
 
 	var constrainttype = LinearProgram.ConstraintTypes[constraint];
 
-	this.Constraints.push({ name: name, row: row.ToText(), constraint: constraint, constant: constant });
+	if (this.localConstraints) {
+		this.Constraints.push({ name: name, row: row.ToText(), constraint: constraint, constant: constant });
+	}
 
-	return this.lprec.add_constraintex(rowId.length, rowValues, rowId, constrainttype, constant) &&
+	if (this.createModel) {
+		 if (!this.lprec.add_constraintex(rowId.length, rowValues, rowId, constrainttype, constant)) return false;
+		 if (this.modelNames) {
 		   this.lprec.set_row_name(this.lprec.get_Nrows(), name || "unamed row");
-
-
+		 }
+		 return true;
+	}
 };
 
 LinearProgram.prototype.setObjective = function(row, minimize) {

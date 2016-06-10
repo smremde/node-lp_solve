@@ -22,7 +22,7 @@ NAN_METHOD(read_LP);
 
 Nan::Persistent<Function> constructor;
 
-class LinearProgram : public node::ObjectWrap {
+class LinearProgram : public Nan::ObjectWrap {
 
 public:
 
