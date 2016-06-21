@@ -349,13 +349,11 @@ public:
 	~SolveWorker() {}
 
 	void Execute() {
-		int res = solve(lp);
+		int res = ::solve(lp);
 		// printf("solve %i\n", res);
 	}
 
 	void HandleOKCallback() {
-
-
 		Local<Value> argv[] = {
 			Nan::Null(),
 			Nan::New<Number>(res)
@@ -744,7 +742,7 @@ NAN_METHOD(LinearProgram::get_row) {
 	if (!(info[0]->IsNumber())) return Nan::ThrowTypeError("First argument should be a Number");
 	if (!(info[1]->IsArray() || info[1]->IsNull())) return Nan::ThrowTypeError("Second argument should be a Array of Numbers or NULL");
 	int rownr = (int)(info[0]->Int32Value());
-	REAL* row;
+	REAL* row= NULL;
 	if (info[1]->IsArray()) {
 		Handle<Array> row_handle = Handle<Array>::Cast(info[1]);
 		int row_n = row_handle->Length();
