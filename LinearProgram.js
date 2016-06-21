@@ -3,7 +3,7 @@
 
 var lp_solve = require('bindings')('lp_solve');
 var Row = require('./Row.js');
-var semaphore = require('semaphore')(1);
+//var semaphore = require('semaphore')(1);
 
 function LinearProgram() {
 	this.Columns = { };
