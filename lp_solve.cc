@@ -557,54 +557,41 @@ NAN_METHOD(LinearProgram::set_obj) {
 	MYBOOL ret = ::set_obj(obj->lp, colnr, value);
 	info.GetReturnValue().Set(Nan::New<Boolean>(ret == 1));
 }
+// checked
 NAN_METHOD(LinearProgram::set_obj_fn) {
 	if (info.Length() != 1) return Nan::ThrowError("Invalid number of arguments");
-	if (!(info[0]->IsArray() || info[0]->IsNull())) return Nan::ThrowTypeError("First argument should be a Array of Numbers or NULL");
-	REAL* row;
-	if (info[0]->IsArray()) {
-		Handle<Array> row_handle = Handle<Array>::Cast(info[0]);
-		int row_n = row_handle->Length();
-		row = new REAL[row_n];
-		for (int i = 0; i < row_n; i++)
-			row[i] = row_handle->Get(i)->NumberValue();
-	}
+	if (!(info[0]->IsArray())) return Nan::ThrowTypeError("First argument should be a Array of Numbers");	
+	Handle<Array> row_handle = Handle<Array>::Cast(info[0]);
+	int row_n = row_handle->Length();
+	REAL* row = new REAL[row_n];
+	for (int i = 0; i < row_n; i++)
+		row[i] = row_handle->Get(i)->NumberValue();	
 	LinearProgram* obj = Nan::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	MYBOOL ret = ::set_obj_fn(obj->lp, row);
-	if (info[0]->IsArray()) {
-		delete[] row;
-	}
+	delete[] row;
 	info.GetReturnValue().Set(Nan::New<Boolean>(ret == 1));
 }
+//checked
 NAN_METHOD(LinearProgram::set_obj_fnex) {
 	if (info.Length() != 3) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsNumber())) return Nan::ThrowTypeError("First argument should be a Number");
-	if (!(info[1]->IsArray() || info[1]->IsNull())) return Nan::ThrowTypeError("Second argument should be a Array of Numbers or NULL");
-	if (!(info[2]->IsArray() || info[2]->IsNull())) return Nan::ThrowTypeError("Third argument should be a Array of Numbers or NULL");
+	if (!(info[1]->IsArray())) return Nan::ThrowTypeError("Second argument should be a Array of Numbers");
+	if (!(info[2]->IsArray())) return Nan::ThrowTypeError("Third argument should be a Array of Numbers");
 	int count = (int)(info[0]->Int32Value());
-	REAL* row;
-	if (info[1]->IsArray()) {
-		Handle<Array> row_handle = Handle<Array>::Cast(info[1]);
-		int row_n = row_handle->Length();
-		row = new REAL[row_n];
-		for (int i = 0; i < row_n; i++)
-			row[i] = row_handle->Get(i)->NumberValue();
-	}
-	int* colno;
-	if (info[2]->IsArray()) {
-		Handle<Array> colno_handle = Handle<Array>::Cast(info[2]);
-		int colno_n = colno_handle->Length();
-		colno = new int[colno_n];
-		for (int i = 0; i < colno_n; i++)
-			colno[i] = colno_handle->Get(i)->Int32Value();
-	}
+	Handle<Array> row_handle = Handle<Array>::Cast(info[1]);
+	int row_n = row_handle->Length();
+	REAL* row = new REAL[row_n];
+	for (int i = 0; i < row_n; i++)
+		row[i] = row_handle->Get(i)->NumberValue();
+	Handle<Array> colno_handle = Handle<Array>::Cast(info[2]);
+	int colno_n = colno_handle->Length();
+	int* colno = new int[colno_n];
+	for (int i = 0; i < colno_n; i++)
+		colno[i] = colno_handle->Get(i)->Int32Value();
 	LinearProgram* obj = Nan::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	MYBOOL ret = ::set_obj_fnex(obj->lp, count, row, colno);
-	if (info[1]->IsArray()) {
-		delete[] row;
-	}
-	if (info[2]->IsArray()) {
-		delete[] colno;
-	}
+	delete[] row;
+	delete[] colno;
 	info.GetReturnValue().Set(Nan::New<Boolean>(ret == 1));
 }
 NAN_METHOD(LinearProgram::str_set_obj_fn) {
@@ -639,62 +626,49 @@ NAN_METHOD(LinearProgram::is_maxim) {
 	MYBOOL ret = ::is_maxim(obj->lp);
 	info.GetReturnValue().Set(Nan::New<Boolean>(ret == 1));
 }
+// checked
 NAN_METHOD(LinearProgram::add_constraint) {
 	if (info.Length() != 3) return Nan::ThrowError("Invalid number of arguments");
-	if (!(info[0]->IsArray() || info[0]->IsNull())) return Nan::ThrowTypeError("First argument should be a Array of Numbers or NULL");
+	if (!(info[0]->IsArray())) return Nan::ThrowTypeError("First argument should be a Array of Numbers");
 	if (!(info[1]->IsNumber())) return Nan::ThrowTypeError("Second argument should be a Number");
 	if (!(info[2]->IsNumber())) return Nan::ThrowTypeError("Third argument should be a Number");
-	REAL* row;
-	if (info[0]->IsArray()) {
-		Handle<Array> row_handle = Handle<Array>::Cast(info[0]);
-		int row_n = row_handle->Length();
-		row = new REAL[row_n];
-		for (int i = 0; i < row_n; i++)
-			row[i] = row_handle->Get(i)->NumberValue();
-	}
+	Handle<Array> row_handle = Handle<Array>::Cast(info[0]);
+	int row_n = row_handle->Length();
+	REAL* row = new REAL[row_n];
+	for (int i = 0; i < row_n; i++)
+		row[i] = row_handle->Get(i)->NumberValue();
 	int constr_type = (int)(info[1]->Int32Value());
 	REAL rh = (REAL)(info[2]->NumberValue());
 	LinearProgram* obj = Nan::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	MYBOOL ret = ::add_constraint(obj->lp, row, constr_type, rh);
-	if (info[0]->IsArray()) {
-		delete[] row;
-	}
+	delete[] row;
 	info.GetReturnValue().Set(Nan::New<Boolean>(ret == 1));
 }
+// checked
 NAN_METHOD(LinearProgram::add_constraintex) {
 	if (info.Length() != 5) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsNumber())) return Nan::ThrowTypeError("First argument should be a Number");
-	if (!(info[1]->IsArray() || info[1]->IsNull())) return Nan::ThrowTypeError("Second argument should be a Array of Numbers or NULL");
-	if (!(info[2]->IsArray() || info[2]->IsNull())) return Nan::ThrowTypeError("Third argument should be a Array of Numbers or NULL");
+	if (!(info[1]->IsArray())) return Nan::ThrowTypeError("Second argument should be a Array of Numbers");
+	if (!(info[2]->IsArray())) return Nan::ThrowTypeError("Third argument should be a Array of Numbers");
 	if (!(info[3]->IsNumber())) return Nan::ThrowTypeError("Fourth argument should be a Number");
 	if (!(info[4]->IsNumber())) return Nan::ThrowTypeError("Fifth argument should be a Number");
 	int count = (int)(info[0]->Int32Value());
-	REAL* row;
-	if (info[1]->IsArray()) {
-		Handle<Array> row_handle = Handle<Array>::Cast(info[1]);
-		int row_n = row_handle->Length();
-		row = new REAL[row_n];
-		for (int i = 0; i < row_n; i++)
-			row[i] = row_handle->Get(i)->NumberValue();
-	}
-	int* colno;
-	if (info[2]->IsArray()) {
-		Handle<Array> colno_handle = Handle<Array>::Cast(info[2]);
-		int colno_n = colno_handle->Length();
-		colno = new int[colno_n];
-		for (int i = 0; i < colno_n; i++)
-			colno[i] = colno_handle->Get(i)->Int32Value();
-	}
+	Handle<Array> row_handle = Handle<Array>::Cast(info[1]);
+	int row_n = row_handle->Length();
+	REAL* row = new REAL[row_n];
+	for (int i = 0; i < row_n; i++)
+		row[i] = row_handle->Get(i)->NumberValue();
+	Handle<Array> colno_handle = Handle<Array>::Cast(info[2]);
+	int colno_n = colno_handle->Length();
+	int* colno = new int[colno_n];
+	for (int i = 0; i < colno_n; i++)
+		colno[i] = colno_handle->Get(i)->Int32Value();
 	int constr_type = (int)(info[3]->Int32Value());
 	REAL rh = (REAL)(info[4]->NumberValue());
 	LinearProgram* obj = Nan::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	MYBOOL ret = ::add_constraintex(obj->lp, count, row, colno, constr_type, rh);
-	if (info[1]->IsArray()) {
-		delete[] row;
-	}
-	if (info[2]->IsArray()) {
-		delete[] colno;
-	}
+	delete[] row;
+	delete[] colno;
 	info.GetReturnValue().Set(Nan::New<Boolean>(ret == 1));
 }
 NAN_METHOD(LinearProgram::set_add_rowmode) {
@@ -727,57 +701,44 @@ NAN_METHOD(LinearProgram::str_add_constraint) {
 NAN_METHOD(LinearProgram::set_row) {
 	if (info.Length() != 2) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsNumber())) return Nan::ThrowTypeError("First argument should be a Number");
-	if (!(info[1]->IsArray() || info[1]->IsNull())) return Nan::ThrowTypeError("Second argument should be a Array of Numbers or NULL");
+	if (!(info[1]->IsArray())) return Nan::ThrowTypeError("Second argument should be a Array of Numbers");
 	int rownr = (int)(info[0]->Int32Value());
-	REAL* row;
-	if (info[1]->IsArray()) {
-		Handle<Array> row_handle = Handle<Array>::Cast(info[1]);
-		int row_n = row_handle->Length();
-		row = new REAL[row_n];
-		for (int i = 0; i < row_n; i++)
-			row[i] = row_handle->Get(i)->NumberValue();
-	}
+	Handle<Array> row_handle = Handle<Array>::Cast(info[1]);
+	int row_n = row_handle->Length();
+	REAL* row = new REAL[row_n];
+	for (int i = 0; i < row_n; i++)
+		row[i] = row_handle->Get(i)->NumberValue();
 	LinearProgram* obj = Nan::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	MYBOOL ret = ::set_row(obj->lp, rownr, row);
-	if (info[1]->IsArray()) {
-		delete[] row;
-	}
+	delete[] row;
 	info.GetReturnValue().Set(Nan::New<Boolean>(ret == 1));
 }
+// checked
 NAN_METHOD(LinearProgram::set_rowex) {
 	if (info.Length() != 4) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsNumber())) return Nan::ThrowTypeError("First argument should be a Number");
 	if (!(info[1]->IsNumber())) return Nan::ThrowTypeError("Second argument should be a Number");
-	if (!(info[2]->IsArray() || info[2]->IsNull())) return Nan::ThrowTypeError("Third argument should be a Array of Numbers or NULL");
-	if (!(info[3]->IsArray() || info[3]->IsNull())) return Nan::ThrowTypeError("Fourth argument should be a Array of Numbers or NULL");
+	if (!(info[2]->IsArray())) return Nan::ThrowTypeError("Third argument should be a Array of Numbers");
+	if (!(info[3]->IsArray())) return Nan::ThrowTypeError("Fourth argument should be a Array of Numbers");
 	int rownr = (int)(info[0]->Int32Value());
 	int count = (int)(info[1]->Int32Value());
-	REAL* row;
-	if (info[2]->IsArray()) {
-		Handle<Array> row_handle = Handle<Array>::Cast(info[2]);
-		int row_n = row_handle->Length();
-		row = new REAL[row_n];
-		for (int i = 0; i < row_n; i++)
-			row[i] = row_handle->Get(i)->NumberValue();
-	}
-	int* colno;
-	if (info[3]->IsArray()) {
-		Handle<Array> colno_handle = Handle<Array>::Cast(info[3]);
-		int colno_n = colno_handle->Length();
-		colno = new int[colno_n];
-		for (int i = 0; i < colno_n; i++)
-			colno[i] = colno_handle->Get(i)->Int32Value();
-	}
+	Handle<Array> row_handle = Handle<Array>::Cast(info[2]);
+	int row_n = row_handle->Length();
+	REAL* row = new REAL[row_n];
+	for (int i = 0; i < row_n; i++)
+		row[i] = row_handle->Get(i)->NumberValue();
+	Handle<Array> colno_handle = Handle<Array>::Cast(info[3]);
+	int colno_n = colno_handle->Length();
+	int* colno = new int[colno_n];
+	for (int i = 0; i < colno_n; i++)
+		colno[i] = colno_handle->Get(i)->Int32Value();
 	LinearProgram* obj = Nan::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	MYBOOL ret = ::set_rowex(obj->lp, rownr, count, row, colno);
-	if (info[2]->IsArray()) {
-		delete[] row;
-	}
-	if (info[3]->IsArray()) {
-		delete[] colno;
-	}
+	delete[] row;
+	delete[] colno;
 	info.GetReturnValue().Set(Nan::New<Boolean>(ret == 1));
 }
+// will not work
 NAN_METHOD(LinearProgram::get_row) {
 	if (info.Length() != 2) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsNumber())) return Nan::ThrowTypeError("First argument should be a Number");
@@ -798,13 +759,14 @@ NAN_METHOD(LinearProgram::get_row) {
 	}
 	info.GetReturnValue().Set(Nan::New<Boolean>(ret == 1));
 }
+// will not work
 NAN_METHOD(LinearProgram::get_rowex) {
 	if (info.Length() != 3) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsNumber())) return Nan::ThrowTypeError("First argument should be a Number");
 	if (!(info[1]->IsArray() || info[1]->IsNull())) return Nan::ThrowTypeError("Second argument should be a Array of Numbers or NULL");
 	if (!(info[2]->IsArray() || info[2]->IsNull())) return Nan::ThrowTypeError("Third argument should be a Array of Numbers or NULL");
 	int rownr = (int)(info[0]->Int32Value());
-	REAL* row;
+	REAL* row = NULL;
 	if (info[1]->IsArray()) {
 		Handle<Array> row_handle = Handle<Array>::Cast(info[1]);
 		int row_n = row_handle->Length();
@@ -812,7 +774,7 @@ NAN_METHOD(LinearProgram::get_rowex) {
 		for (int i = 0; i < row_n; i++)
 			row[i] = row_handle->Get(i)->NumberValue();
 	}
-	int* colno;
+	int* colno = NULL;
 	if (info[2]->IsArray()) {
 		Handle<Array> colno_handle = Handle<Array>::Cast(info[2]);
 		int colno_n = colno_handle->Length();
@@ -830,6 +792,7 @@ NAN_METHOD(LinearProgram::get_rowex) {
 	}
 	info.GetReturnValue().Set(Nan::New<Number>(ret));
 }
+// checked
 NAN_METHOD(LinearProgram::del_constraint) {
 	if (info.Length() != 1) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsNumber())) return Nan::ThrowTypeError("First argument should be a Number");
@@ -843,7 +806,7 @@ NAN_METHOD(LinearProgram::add_lag_con) {
 	if (!(info[0]->IsArray() || info[0]->IsNull())) return Nan::ThrowTypeError("First argument should be a Array of Numbers or NULL");
 	if (!(info[1]->IsNumber())) return Nan::ThrowTypeError("Second argument should be a Number");
 	if (!(info[2]->IsNumber())) return Nan::ThrowTypeError("Third argument should be a Number");
-	REAL* row;
+	REAL* row = NULL;
 	if (info[0]->IsArray()) {
 		Handle<Array> row_handle = Handle<Array>::Cast(info[0]);
 		int row_n = row_handle->Length();
@@ -912,7 +875,7 @@ NAN_METHOD(LinearProgram::get_constr_value) {
 	if (!(info[3]->IsArray() || info[3]->IsNull())) return Nan::ThrowTypeError("Fourth argument should be a Array of Numbers or NULL");
 	int rownr = (int)(info[0]->Int32Value());
 	int count = (int)(info[1]->Int32Value());
-	REAL* primsolution;
+	REAL* primsolution = NULL;
 	if (info[2]->IsArray()) {
 		Handle<Array> primsolution_handle = Handle<Array>::Cast(info[2]);
 		int primsolution_n = primsolution_handle->Length();
@@ -920,7 +883,7 @@ NAN_METHOD(LinearProgram::get_constr_value) {
 		for (int i = 0; i < primsolution_n; i++)
 			primsolution[i] = primsolution_handle->Get(i)->NumberValue();
 	}
-	int* nzindex;
+	int* nzindex = NULL;
 	if (info[3]->IsArray()) {
 		Handle<Array> nzindex_handle = Handle<Array>::Cast(info[3]);
 		int nzindex_n = nzindex_handle->Length();
@@ -986,8 +949,8 @@ NAN_METHOD(LinearProgram::get_rh_range) {
 }
 NAN_METHOD(LinearProgram::set_rh_vec) {
 	if (info.Length() != 1) return Nan::ThrowError("Invalid number of arguments");
-	if (!(info[0]->IsArray() || info[0]->IsNull())) return Nan::ThrowTypeError("First argument should be a Array of Numbers or NULL");
-	REAL* rh;
+	if (!(info[0]->IsArray() || info[0]->IsNull())) return Nan::ThrowTypeError("First argument should be a Array of Numbers");
+	REAL* rh = NULL;
 	if (info[0]->IsArray()) {
 		Handle<Array> rh_handle = Handle<Array>::Cast(info[0]);
 		int rh_n = rh_handle->Length();
@@ -997,9 +960,7 @@ NAN_METHOD(LinearProgram::set_rh_vec) {
 	}
 	LinearProgram* obj = Nan::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::set_rh_vec(obj->lp, rh);
-	if (info[0]->IsArray()) {
-		delete[] rh;
-	}
+	delete[] rh;
 }
 NAN_METHOD(LinearProgram::str_set_rh_vec) {
 	if (info.Length() != 1) return Nan::ThrowError("Invalid number of arguments");
@@ -1013,7 +974,7 @@ NAN_METHOD(LinearProgram::str_set_rh_vec) {
 NAN_METHOD(LinearProgram::add_column) {
 	if (info.Length() != 1) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsArray() || info[0]->IsNull())) return Nan::ThrowTypeError("First argument should be a Array of Numbers or NULL");
-	REAL* column;
+	REAL* column = NULL;
 	if (info[0]->IsArray()) {
 		Handle<Array> column_handle = Handle<Array>::Cast(info[0]);
 		int column_n = column_handle->Length();
@@ -1034,7 +995,7 @@ NAN_METHOD(LinearProgram::add_columnex) {
 	if (!(info[1]->IsArray() || info[1]->IsNull())) return Nan::ThrowTypeError("Second argument should be a Array of Numbers or NULL");
 	if (!(info[2]->IsArray() || info[2]->IsNull())) return Nan::ThrowTypeError("Third argument should be a Array of Numbers or NULL");
 	int count = (int)(info[0]->Int32Value());
-	REAL* column;
+	REAL* column = NULL;
 	if (info[1]->IsArray()) {
 		Handle<Array> column_handle = Handle<Array>::Cast(info[1]);
 		int column_n = column_handle->Length();
@@ -1042,7 +1003,7 @@ NAN_METHOD(LinearProgram::add_columnex) {
 		for (int i = 0; i < column_n; i++)
 			column[i] = column_handle->Get(i)->NumberValue();
 	}
-	int* rowno;
+	int* rowno = NULL;
 	if (info[2]->IsArray()) {
 		Handle<Array> rowno_handle = Handle<Array>::Cast(info[2]);
 		int rowno_n = rowno_handle->Length();
@@ -1074,7 +1035,7 @@ NAN_METHOD(LinearProgram::set_column) {
 	if (!(info[0]->IsNumber())) return Nan::ThrowTypeError("First argument should be a Number");
 	if (!(info[1]->IsArray() || info[1]->IsNull())) return Nan::ThrowTypeError("Second argument should be a Array of Numbers or NULL");
 	int colnr = (int)(info[0]->Int32Value());
-	REAL* column;
+	REAL* column = NULL;
 	if (info[1]->IsArray()) {
 		Handle<Array> column_handle = Handle<Array>::Cast(info[1]);
 		int column_n = column_handle->Length();
@@ -1097,7 +1058,7 @@ NAN_METHOD(LinearProgram::set_columnex) {
 	if (!(info[3]->IsArray() || info[3]->IsNull())) return Nan::ThrowTypeError("Fourth argument should be a Array of Numbers or NULL");
 	int colnr = (int)(info[0]->Int32Value());
 	int count = (int)(info[1]->Int32Value());
-	REAL* column;
+	REAL* column = NULL;
 	if (info[2]->IsArray()) {
 		Handle<Array> column_handle = Handle<Array>::Cast(info[2]);
 		int column_n = column_handle->Length();
@@ -1105,7 +1066,7 @@ NAN_METHOD(LinearProgram::set_columnex) {
 		for (int i = 0; i < column_n; i++)
 			column[i] = column_handle->Get(i)->NumberValue();
 	}
-	int* rowno;
+	int* rowno = NULL;
 	if (info[3]->IsArray()) {
 		Handle<Array> rowno_handle = Handle<Array>::Cast(info[3]);
 		int rowno_n = rowno_handle->Length();
@@ -1126,7 +1087,7 @@ NAN_METHOD(LinearProgram::set_columnex) {
 NAN_METHOD(LinearProgram::column_in_lp) {
 	if (info.Length() != 1) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsArray() || info[0]->IsNull())) return Nan::ThrowTypeError("First argument should be a Array of Numbers or NULL");
-	REAL* column;
+	REAL* column = NULL;
 	if (info[0]->IsArray()) {
 		Handle<Array> column_handle = Handle<Array>::Cast(info[0]);
 		int column_n = column_handle->Length();
@@ -1147,7 +1108,7 @@ NAN_METHOD(LinearProgram::get_columnex) {
 	if (!(info[1]->IsArray() || info[1]->IsNull())) return Nan::ThrowTypeError("Second argument should be a Array of Numbers or NULL");
 	if (!(info[2]->IsArray() || info[2]->IsNull())) return Nan::ThrowTypeError("Third argument should be a Array of Numbers or NULL");
 	int colnr = (int)(info[0]->Int32Value());
-	REAL* column;
+	REAL* column = NULL;
 	if (info[1]->IsArray()) {
 		Handle<Array> column_handle = Handle<Array>::Cast(info[1]);
 		int column_n = column_handle->Length();
@@ -1155,7 +1116,7 @@ NAN_METHOD(LinearProgram::get_columnex) {
 		for (int i = 0; i < column_n; i++)
 			column[i] = column_handle->Get(i)->NumberValue();
 	}
-	int* nzrow;
+	int* nzrow = NULL;
 	if (info[2]->IsArray()) {
 		Handle<Array> nzrow_handle = Handle<Array>::Cast(info[2]);
 		int nzrow_n = nzrow_handle->Length();
@@ -1178,7 +1139,7 @@ NAN_METHOD(LinearProgram::get_column) {
 	if (!(info[0]->IsNumber())) return Nan::ThrowTypeError("First argument should be a Number");
 	if (!(info[1]->IsArray() || info[1]->IsNull())) return Nan::ThrowTypeError("Second argument should be a Array of Numbers or NULL");
 	int colnr = (int)(info[0]->Int32Value());
-	REAL* column;
+	REAL* column = NULL;
 	if (info[1]->IsArray()) {
 		Handle<Array> column_handle = Handle<Array>::Cast(info[1]);
 		int column_n = column_handle->Length();
@@ -1383,7 +1344,7 @@ NAN_METHOD(LinearProgram::is_negative) {
 NAN_METHOD(LinearProgram::set_var_weights) {
 	if (info.Length() != 1) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsArray() || info[0]->IsNull())) return Nan::ThrowTypeError("First argument should be a Array of Numbers or NULL");
-	REAL* weights;
+	REAL* weights = NULL;
 	if (info[0]->IsArray()) {
 		Handle<Array> weights_handle = Handle<Array>::Cast(info[0]);
 		int weights_n = weights_handle->Length();
@@ -1411,7 +1372,7 @@ NAN_METHOD(LinearProgram::set_pseudocosts) {
 	if (!(info[0]->IsArray() || info[0]->IsNull())) return Nan::ThrowTypeError("First argument should be a Array of Numbers or NULL");
 	if (!(info[1]->IsArray() || info[1]->IsNull())) return Nan::ThrowTypeError("Second argument should be a Array of Numbers or NULL");
 	if (!(info[2]->IsArray() || info[2]->IsNull())) return Nan::ThrowTypeError("Third argument should be a Array of Numbers or NULL");
-	REAL* clower;
+	REAL* clower = NULL;
 	if (info[0]->IsArray()) {
 		Handle<Array> clower_handle = Handle<Array>::Cast(info[0]);
 		int clower_n = clower_handle->Length();
@@ -1419,7 +1380,7 @@ NAN_METHOD(LinearProgram::set_pseudocosts) {
 		for (int i = 0; i < clower_n; i++)
 			clower[i] = clower_handle->Get(i)->NumberValue();
 	}
-	REAL* cupper;
+	REAL* cupper = NULL;
 	if (info[1]->IsArray()) {
 		Handle<Array> cupper_handle = Handle<Array>::Cast(info[1]);
 		int cupper_n = cupper_handle->Length();
@@ -1427,7 +1388,7 @@ NAN_METHOD(LinearProgram::set_pseudocosts) {
 		for (int i = 0; i < cupper_n; i++)
 			cupper[i] = cupper_handle->Get(i)->NumberValue();
 	}
-	int* updatelimit;
+	int* updatelimit = NULL;
 	if (info[2]->IsArray()) {
 		Handle<Array> updatelimit_handle = Handle<Array>::Cast(info[2]);
 		int updatelimit_n = updatelimit_handle->Length();
@@ -1453,7 +1414,7 @@ NAN_METHOD(LinearProgram::get_pseudocosts) {
 	if (!(info[0]->IsArray() || info[0]->IsNull())) return Nan::ThrowTypeError("First argument should be a Array of Numbers or NULL");
 	if (!(info[1]->IsArray() || info[1]->IsNull())) return Nan::ThrowTypeError("Second argument should be a Array of Numbers or NULL");
 	if (!(info[2]->IsArray() || info[2]->IsNull())) return Nan::ThrowTypeError("Third argument should be a Array of Numbers or NULL");
-	REAL* clower;
+	REAL* clower = NULL;
 	if (info[0]->IsArray()) {
 		Handle<Array> clower_handle = Handle<Array>::Cast(info[0]);
 		int clower_n = clower_handle->Length();
@@ -1461,7 +1422,7 @@ NAN_METHOD(LinearProgram::get_pseudocosts) {
 		for (int i = 0; i < clower_n; i++)
 			clower[i] = clower_handle->Get(i)->NumberValue();
 	}
-	REAL* cupper;
+	REAL* cupper = NULL;
 	if (info[1]->IsArray()) {
 		Handle<Array> cupper_handle = Handle<Array>::Cast(info[1]);
 		int cupper_n = cupper_handle->Length();
@@ -1469,7 +1430,7 @@ NAN_METHOD(LinearProgram::get_pseudocosts) {
 		for (int i = 0; i < cupper_n; i++)
 			cupper[i] = cupper_handle->Get(i)->NumberValue();
 	}
-	int* updatelimit;
+	int* updatelimit = NULL;
 	if (info[2]->IsArray()) {
 		Handle<Array> updatelimit_handle = Handle<Array>::Cast(info[2]);
 		int updatelimit_n = updatelimit_handle->Length();
@@ -1503,7 +1464,7 @@ NAN_METHOD(LinearProgram::add_SOS) {
 	int sostype = (int)(info[1]->Int32Value());
 	int priority = (int)(info[2]->Int32Value());
 	int count = (int)(info[3]->Int32Value());
-	int* sosvars;
+	int* sosvars = NULL;
 	if (info[4]->IsArray()) {
 		Handle<Array> sosvars_handle = Handle<Array>::Cast(info[4]);
 		int sosvars_n = sosvars_handle->Length();
@@ -1511,7 +1472,7 @@ NAN_METHOD(LinearProgram::add_SOS) {
 		for (int i = 0; i < sosvars_n; i++)
 			sosvars[i] = sosvars_handle->Get(i)->Int32Value();
 	}
-	REAL* weights;
+	REAL* weights = NULL;
 	if (info[5]->IsArray()) {
 		Handle<Array> weights_handle = Handle<Array>::Cast(info[5]);
 		int weights_n = weights_handle->Length();
@@ -1647,7 +1608,7 @@ NAN_METHOD(LinearProgram::set_basis) {
 	if (info.Length() != 2) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsArray() || info[0]->IsNull())) return Nan::ThrowTypeError("First argument should be a Array of Numbers or NULL");
 	if (!(info[1]->IsBoolean())) return Nan::ThrowTypeError("Second argument should be a Boolean");
-	int* bascolumn;
+	int* bascolumn = NULL;
 	if (info[0]->IsArray()) {
 		Handle<Array> bascolumn_handle = Handle<Array>::Cast(info[0]);
 		int bascolumn_n = bascolumn_handle->Length();
@@ -1667,7 +1628,7 @@ NAN_METHOD(LinearProgram::get_basis) {
 	if (info.Length() != 2) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsArray() || info[0]->IsNull())) return Nan::ThrowTypeError("First argument should be a Array of Numbers or NULL");
 	if (!(info[1]->IsBoolean())) return Nan::ThrowTypeError("Second argument should be a Boolean");
-	int* bascolumn;
+	int* bascolumn = NULL;
 	if (info[0]->IsArray()) {
 		Handle<Array> bascolumn_handle = Handle<Array>::Cast(info[0]);
 		int bascolumn_n = bascolumn_handle->Length();
@@ -1692,7 +1653,7 @@ NAN_METHOD(LinearProgram::guess_basis) {
 	if (info.Length() != 2) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsArray() || info[0]->IsNull())) return Nan::ThrowTypeError("First argument should be a Array of Numbers or NULL");
 	if (!(info[1]->IsArray() || info[1]->IsNull())) return Nan::ThrowTypeError("Second argument should be a Array of Numbers or NULL");
-	REAL* guessvector;
+	REAL* guessvector = NULL;
 	if (info[0]->IsArray()) {
 		Handle<Array> guessvector_handle = Handle<Array>::Cast(info[0]);
 		int guessvector_n = guessvector_handle->Length();
@@ -1700,7 +1661,7 @@ NAN_METHOD(LinearProgram::guess_basis) {
 		for (int i = 0; i < guessvector_n; i++)
 			guessvector[i] = guessvector_handle->Get(i)->NumberValue();
 	}
-	int* basisvector;
+	int* basisvector = NULL;
 	if (info[1]->IsArray()) {
 		Handle<Array> basisvector_handle = Handle<Array>::Cast(info[1]);
 		int basisvector_n = basisvector_handle->Length();
@@ -1722,7 +1683,7 @@ NAN_METHOD(LinearProgram::is_feasible) {
 	if (info.Length() != 2) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsArray() || info[0]->IsNull())) return Nan::ThrowTypeError("First argument should be a Array of Numbers or NULL");
 	if (!(info[1]->IsNumber())) return Nan::ThrowTypeError("Second argument should be a Number");
-	REAL* values;
+	REAL* values = NULL;
 	if (info[0]->IsArray()) {
 		Handle<Array> values_handle = Handle<Array>::Cast(info[0]);
 		int values_n = values_handle->Length();
@@ -1810,7 +1771,7 @@ LinearProgram* obj = Nan::ObjectWrap::Unwrap<LinearProgram>(info.This());
 NAN_METHOD(LinearProgram::get_primal_solution) {
 	if (info.Length() != 1) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsArray() || info[0]->IsNull())) return Nan::ThrowTypeError("First argument should be a Array of Numbers or NULL");
-	REAL* pv;
+	REAL* pv = NULL;
 	if (info[0]->IsArray()) {
 		Handle<Array> pv_handle = Handle<Array>::Cast(info[0]);
 		int pv_n = pv_handle->Length();
@@ -1840,7 +1801,7 @@ info.GetReturnValue().Set(Nan::New<Boolean>(ret == 1));
 NAN_METHOD(LinearProgram::get_dual_solution) {
 	if (info.Length() != 1) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsArray() || info[0]->IsNull())) return Nan::ThrowTypeError("First argument should be a Array of Numbers or NULL");
-	REAL* rc;
+	REAL* rc = NULL;
 	if (info[0]->IsArray()) {
 		Handle<Array> rc_handle = Handle<Array>::Cast(info[0]);
 		int rc_n = rc_handle->Length();
@@ -1870,7 +1831,7 @@ info.GetReturnValue().Set(Nan::New<Boolean>(ret == 1));
 NAN_METHOD(LinearProgram::get_lambda) {
 	if (info.Length() != 1) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsArray() || info[0]->IsNull())) return Nan::ThrowTypeError("First argument should be a Array of Numbers or NULL");
-	REAL* lambda;
+	REAL* lambda = NULL;
 	if (info[0]->IsArray()) {
 		Handle<Array> lambda_handle = Handle<Array>::Cast(info[0]);
 		int lambda_n = lambda_handle->Length();
@@ -2551,7 +2512,7 @@ NAN_METHOD(LinearProgram::set_partialprice) {
 	if (!(info[1]->IsArray() || info[1]->IsNull())) return Nan::ThrowTypeError("Second argument should be a Array of Numbers or NULL");
 	if (!(info[2]->IsBoolean())) return Nan::ThrowTypeError("Third argument should be a Boolean");
 	int blockcount = (int)(info[0]->Int32Value());
-	int* blockstart;
+	int* blockstart = NULL;
 	if (info[1]->IsArray()) {
 		Handle<Array> blockstart_handle = Handle<Array>::Cast(info[1]);
 		int blockstart_n = blockstart_handle->Length();
@@ -2572,7 +2533,7 @@ NAN_METHOD(LinearProgram::get_partialprice) {
 	if (!(info[0]->IsArray() || info[0]->IsNull())) return Nan::ThrowTypeError("First argument should be a Array of Numbers or NULL");
 	if (!(info[1]->IsArray() || info[1]->IsNull())) return Nan::ThrowTypeError("Second argument should be a Array of Numbers or NULL");
 	if (!(info[2]->IsBoolean())) return Nan::ThrowTypeError("Third argument should be a Boolean");
-	int* blockcount;
+	int* blockcount = NULL;
 	if (info[0]->IsArray()) {
 		Handle<Array> blockcount_handle = Handle<Array>::Cast(info[0]);
 		int blockcount_n = blockcount_handle->Length();
@@ -2580,7 +2541,7 @@ NAN_METHOD(LinearProgram::get_partialprice) {
 		for (int i = 0; i < blockcount_n; i++)
 			blockcount[i] = blockcount_handle->Get(i)->Int32Value();
 	}
-	int* blockstart;
+	int* blockstart = NULL;
 	if (info[1]->IsArray()) {
 		Handle<Array> blockstart_handle = Handle<Array>::Cast(info[1]);
 		int blockstart_n = blockstart_handle->Length();
@@ -2821,20 +2782,15 @@ info.GetReturnValue().Set(Nan::New<Boolean>(ret == 1));
 */
 NAN_METHOD(LinearProgram::get_constraints) {
 	if (info.Length() != 1) return Nan::ThrowError("Invalid number of arguments");
-	if (!(info[0]->IsArray() || info[0]->IsNull())) return Nan::ThrowTypeError("First argument should be a Array of Numbers or NULL");
-	REAL* constr;
-	if (info[0]->IsArray()) {
-		Handle<Array> constr_handle = Handle<Array>::Cast(info[0]);
-		int constr_n = constr_handle->Length();
-		constr = new REAL[constr_n];
-		for (int i = 0; i < constr_n; i++)
-			constr[i] = constr_handle->Get(i)->NumberValue();
-	}
+	if (!(info[0]->IsArray())) return Nan::ThrowTypeError("First argument should be a Array of Numbers");
+	Handle<Array> constr_handle = Handle<Array>::Cast(info[0]);
+	int constr_n = constr_handle->Length();
+	REAL* constr = new REAL[constr_n];
+	for (int i = 0; i < constr_n; i++)
+		constr[i] = constr_handle->Get(i)->NumberValue();
 	LinearProgram* obj = Nan::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	MYBOOL ret = ::get_constraints(obj->lp, constr);
-	if (info[0]->IsArray()) {
-		delete[] constr;
-	}
+	delete[] constr;
 	info.GetReturnValue().Set(Nan::New<Boolean>(ret == 1));
 }
 /*
@@ -2854,7 +2810,7 @@ NAN_METHOD(LinearProgram::get_sensitivity_rhs) {
 	if (!(info[0]->IsArray() || info[0]->IsNull())) return Nan::ThrowTypeError("First argument should be a Array of Numbers or NULL");
 	if (!(info[1]->IsArray() || info[1]->IsNull())) return Nan::ThrowTypeError("Second argument should be a Array of Numbers or NULL");
 	if (!(info[2]->IsArray() || info[2]->IsNull())) return Nan::ThrowTypeError("Third argument should be a Array of Numbers or NULL");
-	REAL* duals;
+	REAL* duals = NULL;
 	if (info[0]->IsArray()) {
 		Handle<Array> duals_handle = Handle<Array>::Cast(info[0]);
 		int duals_n = duals_handle->Length();
@@ -2862,7 +2818,7 @@ NAN_METHOD(LinearProgram::get_sensitivity_rhs) {
 		for (int i = 0; i < duals_n; i++)
 			duals[i] = duals_handle->Get(i)->NumberValue();
 	}
-	REAL* dualsfrom;
+	REAL* dualsfrom = NULL;
 	if (info[1]->IsArray()) {
 		Handle<Array> dualsfrom_handle = Handle<Array>::Cast(info[1]);
 		int dualsfrom_n = dualsfrom_handle->Length();
@@ -2870,7 +2826,7 @@ NAN_METHOD(LinearProgram::get_sensitivity_rhs) {
 		for (int i = 0; i < dualsfrom_n; i++)
 			dualsfrom[i] = dualsfrom_handle->Get(i)->NumberValue();
 	}
-	REAL* dualstill;
+	REAL* dualstill = NULL;
 	if (info[2]->IsArray()) {
 		Handle<Array> dualstill_handle = Handle<Array>::Cast(info[2]);
 		int dualstill_n = dualstill_handle->Length();
@@ -2907,7 +2863,7 @@ NAN_METHOD(LinearProgram::get_sensitivity_obj) {
 	if (info.Length() != 2) return Nan::ThrowError("Invalid number of arguments");
 	if (!(info[0]->IsArray() || info[0]->IsNull())) return Nan::ThrowTypeError("First argument should be a Array of Numbers or NULL");
 	if (!(info[1]->IsArray() || info[1]->IsNull())) return Nan::ThrowTypeError("Second argument should be a Array of Numbers or NULL");
-	REAL* objfrom;
+	REAL* objfrom = NULL;
 	if (info[0]->IsArray()) {
 		Handle<Array> objfrom_handle = Handle<Array>::Cast(info[0]);
 		int objfrom_n = objfrom_handle->Length();
@@ -2915,7 +2871,7 @@ NAN_METHOD(LinearProgram::get_sensitivity_obj) {
 		for (int i = 0; i < objfrom_n; i++)
 			objfrom[i] = objfrom_handle->Get(i)->NumberValue();
 	}
-	REAL* objtill;
+	REAL* objtill = NULL;
 	if (info[1]->IsArray()) {
 		Handle<Array> objtill_handle = Handle<Array>::Cast(info[1]);
 		int objtill_n = objtill_handle->Length();
@@ -2939,7 +2895,7 @@ NAN_METHOD(LinearProgram::get_sensitivity_objex) {
 	if (!(info[1]->IsArray() || info[1]->IsNull())) return Nan::ThrowTypeError("Second argument should be a Array of Numbers or NULL");
 	if (!(info[2]->IsArray() || info[2]->IsNull())) return Nan::ThrowTypeError("Third argument should be a Array of Numbers or NULL");
 	if (!(info[3]->IsArray() || info[3]->IsNull())) return Nan::ThrowTypeError("Fourth argument should be a Array of Numbers or NULL");
-	REAL* objfrom;
+	REAL* objfrom = NULL;
 	if (info[0]->IsArray()) {
 		Handle<Array> objfrom_handle = Handle<Array>::Cast(info[0]);
 		int objfrom_n = objfrom_handle->Length();
@@ -2947,7 +2903,7 @@ NAN_METHOD(LinearProgram::get_sensitivity_objex) {
 		for (int i = 0; i < objfrom_n; i++)
 			objfrom[i] = objfrom_handle->Get(i)->NumberValue();
 	}
-	REAL* objtill;
+	REAL* objtill = NULL;
 	if (info[1]->IsArray()) {
 		Handle<Array> objtill_handle = Handle<Array>::Cast(info[1]);
 		int objtill_n = objtill_handle->Length();
@@ -2955,7 +2911,7 @@ NAN_METHOD(LinearProgram::get_sensitivity_objex) {
 		for (int i = 0; i < objtill_n; i++)
 			objtill[i] = objtill_handle->Get(i)->NumberValue();
 	}
-	REAL* objfromvalue;
+	REAL* objfromvalue = NULL;
 	if (info[2]->IsArray()) {
 		Handle<Array> objfromvalue_handle = Handle<Array>::Cast(info[2]);
 		int objfromvalue_n = objfromvalue_handle->Length();
@@ -2963,7 +2919,7 @@ NAN_METHOD(LinearProgram::get_sensitivity_objex) {
 		for (int i = 0; i < objfromvalue_n; i++)
 			objfromvalue[i] = objfromvalue_handle->Get(i)->NumberValue();
 	}
-	REAL* objtillvalue;
+	REAL* objtillvalue = NULL;
 	if (info[3]->IsArray()) {
 		Handle<Array> objtillvalue_handle = Handle<Array>::Cast(info[3]);
 		int objtillvalue_n = objtillvalue_handle->Length();
