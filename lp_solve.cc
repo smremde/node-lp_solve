@@ -349,7 +349,7 @@ public:
 	~SolveWorker() {}
 
 	void Execute() {
-		int res = ::solve(lp);
+		res = ::solve(lp);
 		// printf("solve %i\n", res);
 	}
 
