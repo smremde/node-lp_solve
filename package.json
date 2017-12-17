@@ -1,7 +1,7 @@
 {
   "name": "lp_solve",
   "description": "A Node.js binding for lp_solve",
-  "version": "0.2.13",
+  "version": "0.2.14",
   "author": {
     "name": "Stephen Remde",
     "email": "smremde@gmail.com"
