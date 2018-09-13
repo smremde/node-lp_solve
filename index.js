@@ -1,13 +1,12 @@
-/* jslint node: true */
-'use strict';
+const lp_solveFactory = require('bindings');
+const Row = require('./Row.js');
+const LinearProgram = require('./LinearProgram.js');
 
-var lp_solve = require('bindings')('lp_solve');
-var Row = require('./Row.js');
-var LinearProgram = require('./LinearProgram.js');
+const lp_solve = lp_solveFactory('lp_solve');
 
 module.exports = {
-	Row: Row,
-	LinearProgram: LinearProgram,
-	lp_solve: lp_solve,
-	version: lp_solve.lp_solve_version()
+  Row,
+  LinearProgram,
+  lp_solve,
+  version: lp_solve.lp_solve_version()
 };

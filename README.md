@@ -5,27 +5,26 @@ A NodeJS module for createing and solving simple Linear Programs using lp_solve.
 
 Example:
 
-```javascript
-
+```js
 // solve http://people.brunel.ac.uk/~mastjjb/jeb/or/morelp.html
 
-var lpsolve = require('lp_solve');
-var Row = lpsolve.Row;
+import lpsolve from 'lp_solve';
+const Row = lpsolve.Row;
 
-var lp = new lpsolve.LinearProgram();
+const lp = new lpsolve.LinearProgram();
 
-var x = lp.addColumn('x'); // lp.addColumn('x', true) for integer variable
-var y = lp.addColumn('y'); // lp.addColumn('y', false, true) for binary variable
+const x = lp.addColumn('x'); // lp.addColumn('x', true) for integer variable
+const y = lp.addColumn('y'); // lp.addColumn('y', false, true) for binary variable
 
 
-var objective = new Row().Add(x, 1).Add(y, 1);
+const objective = new Row().Add(x, 1).Add(y, 1);
 
 lp.setObjective(objective);
 
-var machineatime = new Row().Add(x, 50).Add(y, 24);
+const machineatime = new Row().Add(x, 50).Add(y, 24);
 lp.addConstraint(machineatime, 'LE', 2400, 'machine a time')
 
-var machinebtime = new Row().Add(x, 30).Add(y, 33);
+const machinebtime = new Row().Add(x, 30).Add(y, 33);
 lp.addConstraint(machinebtime, 'LE', 2100, 'machine b time')
 
 lp.addConstraint(new Row().Add(x, 1), 'GE', 75 - 30, 'meet demand of x')
@@ -38,7 +37,6 @@ console.log('x =', lp.get(x));
 console.log('y =', lp.get(y));
 console.log('machineatime =', lp.calculate(machineatime));
 console.log('machinebtime =', lp.calculate(machinebtime));
-
 ```
 
 Output
@@ -87,11 +85,10 @@ Access to the full lp_solve api is available through lp.lprec - some functions h
 
 e.g.:
 
-```
-var lpsolve = require('lp_solve');
+```js
+import lpsolve from 'lp_solve';
 
-var lp = new lpsolve.LinearProgram();
+const lp = new lpsolve.LinearProgram();
 
 lp.lprec.set_presolve(/* PRESOLVE_NONE */ 0, 0);
-
 ```
