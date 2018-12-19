@@ -3,7 +3,6 @@
 
 var lp_solve = require('bindings')('lp_solve');
 var Row = require('./Row.js');
-//var semaphore = require('semaphore')(1);
 
 function LinearProgram() {
 	this.Columns = { };
@@ -158,15 +157,12 @@ LinearProgram.prototype.setVerbose = function(verb) {
 
 LinearProgram.prototype.solveAsync = function(callback) {
 	var that = this;
-	//semaphore.take(function() {
-		that.lprec.solve_async(function (err, res) {
-			//semaphore.leave();
-			if (res === 0 || res == 1 || res == 9)
-				that.solutionVariables = that.getSolutionVariables();
+	that.lprec.solve_async(function (err, res) {
+		if (res === 0 || res == 1 || res == 9)
+			that.solutionVariables = that.getSolutionVariables();
 
-			callback({ code: res, description: LinearProgram.SolveResult[res] });
-		});
-	//});
+		callback({ code: res, description: LinearProgram.SolveResult[res] });
+	});
 };
 
 LinearProgram.prototype.getObjectiveValue = function() {
