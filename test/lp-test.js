@@ -89,8 +89,8 @@ test('ilp', function (t) {
 });
 
 var lps = [];
-var count = 110;
-var batches = 99;
+var count = 50;
+var batches = 50;
 
 test('lp async', {timeout:10000000}, function (t) {
 
