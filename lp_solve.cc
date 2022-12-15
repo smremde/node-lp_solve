@@ -6,7 +6,7 @@
 
 using namespace v8;
 
-void InitAll(v8::Local<v8::Object> exports, v8::Local<v8::Object> module) {
+NAN_MODULE_INIT(InitAll) {
 	Nan::Set(target, Nan::New<String>("lp_solve_version").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(getVersion)).ToLocalChecked());
 	Nan::Set(target, Nan::New<String>("make_lp").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(make_lp)).ToLocalChecked());
 	// Nan::Set(target, Nan::New<String>("free_lp").ToLocalChecked(), Nan::GetFunction(Nan::New<FunctionTemplate>(free_lp)).ToLocalChecked());
