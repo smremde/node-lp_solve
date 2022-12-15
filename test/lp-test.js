@@ -4,11 +4,11 @@ var test = require('tap').test,
 test('lp timeout', function (t) {
   t.plan(3);
   var lp = new lpsolve.LinearProgram();
-  t.equals(lp.lprec.get_timeout(), 0);
+  t.equal(lp.lprec.get_timeout(), 0);
   lp.lprec.set_timeout(1);
-  t.equals(lp.lprec.get_timeout(), 1);
+  t.equal(lp.lprec.get_timeout(), 1);
   lp.lprec.set_timeout(0);
-  t.equals(lp.lprec.get_timeout(), 0);
+  t.equal(lp.lprec.get_timeout(), 0);
 
 });
 
@@ -42,11 +42,11 @@ test('lp', function (t) {
 
   lp.solve();
 
-  t.equals(lp.getObjectiveValue(), 50);
-  t.equals(lp.get(x), 45);
-  t.equals(lp.get(y), 5);
-  t.equals(lp.calculate(machineatime), 2370);
-  t.equals(lp.calculate(machinebtime), 1515);
+  t.equal(lp.getObjectiveValue(), 50);
+  t.equal(lp.get(x), 45);
+  t.equal(lp.get(y), 5);
+  t.equal(lp.calculate(machineatime), 2370);
+  t.equal(lp.calculate(machinebtime), 1515);
 });
 
 test('ilp', function (t) {
@@ -80,17 +80,17 @@ test('ilp', function (t) {
 
   lp2.solve();
 
-  t.equals(lp2.getObjectiveValue(), 50);
-  t.equals(lp2.get(x2), 45);
-  t.equals(lp2.get(y2), 5);
-  t.equals(lp2.calculate(machineatime2), 1185);
-  t.equals(lp2.calculate(machinebtime2), 725);
+  t.equal(lp2.getObjectiveValue(), 50);
+  t.equal(lp2.get(x2), 45);
+  t.equal(lp2.get(y2), 5);
+  t.equal(lp2.calculate(machineatime2), 1185);
+  t.equal(lp2.calculate(machinebtime2), 725);
 
 });
 
 var lps = [];
-var count = 50;
-var batches = 50;
+var count = 10;
+var batches = 10;
 
 test('lp async', {timeout:10000000}, function (t) {
 
@@ -129,8 +129,8 @@ test('lp async', {timeout:10000000}, function (t) {
               //console.log(lp);
             lp.solveAsync(function (res) {
               //console.log(res);
-              t.equals(res.code, 0);
-              t.equals(lp.getObjectiveValue(), 50);
+              t.equal(res.code, 0);
+              t.equal(lp.getObjectiveValue(), 50);
             });
           })(lps[i + batch * count]);
         }
@@ -149,4 +149,11 @@ test('lp async solve', function (t) {
     t.ok(lps[i].solutionVariables);
   }
   t.end();
+});
+
+
+test('throw error on invalid file', function (t) {
+    t.plan(1);
+    var lp = new lpsolve.LinearProgram();
+    lp.setOutputFile('/z/x/c/v/b/!.?*');
 });
