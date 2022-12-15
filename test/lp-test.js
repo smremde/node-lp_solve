@@ -155,5 +155,9 @@ test('lp async solve', function (t) {
 test('throw error on invalid file', function (t) {
     t.plan(1);
     var lp = new lpsolve.LinearProgram();
-    lp.setOutputFile('/z/x/c/v/b/!.?*');
+    try {
+        lp.setOutputFile('/z/x/c/v/b/!.?*');
+    } catch {
+        t.ok();
+    }
 });
