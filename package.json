@@ -27,5 +27,8 @@
   },
   "license": "LGPL",
   "gypfile": true,
-  "main": "index"
+  "main": "index",
+  "tap": {
+    "check-coverage": false
+  }
 }
