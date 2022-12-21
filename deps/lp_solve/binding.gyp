@@ -49,6 +49,12 @@
             'direct_dependent_settings': {
                 'include_dirs': ['lp_solve_5.5']
             },
+            'msvs_settings': {
+                'VCCLCompilerTool': {
+                    'WarningLevel': '0'
+                }
+            },
+            'cflags': ['-w']
         }
     ]
 }

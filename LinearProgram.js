@@ -63,8 +63,10 @@ LinearProgram.prototype.addConstraint = function(row, constraint, constant, name
 
 	for (var k in raw) {
 		if (k !== 'constant') {
+            const col = this.Columns[k];
+            if (!col) throw new Error('column "' + k + '" not defined')
 			rowValues.push(raw[k]);
-			rowId.push(this.Columns[k]);
+			rowId.push(col);
 		} else {
 			constant -= raw[k];
 		}
@@ -77,12 +79,13 @@ LinearProgram.prototype.addConstraint = function(row, constraint, constant, name
 	}
 
 	if (this.createModel) {
-		 if (!this.lprec.add_constraintex(rowId.length, rowValues, rowId, constrainttype, constant)) return false;
+		 if (!this.lprec.add_constraintex(rowId.length, rowValues, rowId, constrainttype, constant)) 
+            return false;
 		 if (this.modelNames) {
 		   this.lprec.set_row_name(this.lprec.get_Nrows(), name || "unamed row");
 		 }
-		 return true;
 	}
+    return true;
 };
 
 LinearProgram.prototype.setObjective = function(row, minimize) {
@@ -92,8 +95,10 @@ LinearProgram.prototype.setObjective = function(row, minimize) {
 
 	for (var k in raw) {
 		if (k !== 'constant') {
+            const col = this.Columns[k];
+            if (!col) throw new Error('column "' + k + '" not defined')
 			rowValues.push(raw[k]);
-			rowId.push(this.Columns[k]);
+			rowId.push(col);
 		} else {
 			this.adjustObjective = raw[k];
 		}
