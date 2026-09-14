@@ -29,12 +29,10 @@
     "test": "tap test/*-test.js"
   },
   "tap": {
-    "coverage": {
-      "statements": 90,
-      "branches": 85,
-      "functions": 90,
-      "lines": 90
-    }
+    "statements": 90,
+    "branches": 85,
+    "functions": 90,
+    "lines": 90
   },
   "license": "LGPL",
   "gypfile": true,
