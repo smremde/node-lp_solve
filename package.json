@@ -31,6 +31,9 @@
   "license": "LGPL",
   "gypfile": true,
   "main": "index",
+  "engines": {
+    "node": ">=18"
+  },
   "tap": {
     "check-coverage": false
   }
