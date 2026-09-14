@@ -17,18 +17,27 @@
   ],
   "dependencies": {
     "bindings": "^1.5.0",
-    "nan": "^2.17.0"
+    "nan": "^2.28.0"
   },
   "devDependencies": {
-    "tap": "^16.3.2"
+    "node-gyp": "^11.0.0",
+    "tap": "^21.8.0"
   },
   "scripts": {
+    "build": "node-gyp rebuild",
+    "pretest": "npm run build",
     "test": "tap test/*-test.js"
+  },
+  "tap": {
+    "statements": 90,
+    "branches": 85,
+    "functions": 90,
+    "lines": 90
   },
   "license": "LGPL",
   "gypfile": true,
   "main": "index",
-  "tap": {
-    "check-coverage": false
+  "engines": {
+    "node": ">=18"
   }
 }

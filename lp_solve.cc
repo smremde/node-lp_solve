@@ -51,7 +51,7 @@ NAN_MODULE_INIT(InitAll) {
 	LinearProgram::Init(target);
 }
 
-NODE_MODULE(lp_solve, InitAll);
+NAN_MODULE_WORKER_ENABLED(lp_solve, InitAll)
 
 NAN_METHOD(getVersion) {
 	int majorversion, minorversion, release, build;
