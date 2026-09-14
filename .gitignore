@@ -22,3 +22,4 @@ deps/lp_solve/lp_solve_5.5.vcxproj.filters
 
 outputjs
 .nyc_output
+.tap
