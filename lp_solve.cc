@@ -586,8 +586,11 @@ NAN_METHOD(LinearProgram::set_obj_fnex) {
 	int* colno = new int[colno_n];
 	for (int i = 0; i < colno_n; i++)
 		colno[i] = Nan::To<int32_t>(Nan::Get(colno_handle, i).ToLocalChecked()).ToChecked();
-	LinearProgram* obj = Nan::ObjectWrap::Unwrap<LinearProgram>(info.This());
-	MYBOOL ret = ::set_obj_fnex(obj->lp, count, row, colno);
+	if (count < 0 || count > row_n || count > colno_n) {
+		delete[] row;
+		delete[] colno;
+		return Nan::ThrowRangeError("count exceeds the supplied arrays");
+	}	MYBOOL ret = ::set_obj_fnex(obj->lp, count, row, colno);
 	delete[] row;
 	delete[] colno;
 	info.GetReturnValue().Set(Nan::New<Boolean>(ret == 1));
