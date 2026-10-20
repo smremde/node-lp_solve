@@ -997,20 +997,27 @@ NAN_METHOD(LinearProgram::add_columnex) {
 	if (!(info[2]->IsArray() || info[2]->IsNull())) return Nan::ThrowTypeError("Third argument should be a Array of Numbers or NULL");
 	int count = (int)(Nan::To<int32_t>(info[0]).ToChecked());
 	REAL* column = NULL;
+	int column_n = 0;
 	if (info[1]->IsArray()) {
 		Local<Array> column_handle = Local<Array>::Cast(info[1]);
-		int column_n = column_handle->Length();
+		column_n = column_handle->Length();
 		column = new REAL[column_n];
 		for (int i = 0; i < column_n; i++)
 			column[i] = Nan::To<double>(Nan::Get(column_handle, i).ToLocalChecked()).ToChecked();
 	}
 	int* rowno = NULL;
+	int rowno_n = 0;
 	if (info[2]->IsArray()) {
 		Local<Array> rowno_handle = Local<Array>::Cast(info[2]);
-		int rowno_n = rowno_handle->Length();
+		rowno_n = rowno_handle->Length();
 		rowno = new int[rowno_n];
 		for (int i = 0; i < rowno_n; i++)
 			rowno[i] = Nan::To<int32_t>(Nan::Get(rowno_handle, i).ToLocalChecked()).ToChecked();
+	}
+	if (count < 0 || (column != NULL && count > column_n) || (rowno != NULL && count > rowno_n)) {
+		delete[] column;
+		delete[] rowno;
+		return Nan::ThrowRangeError("count exceeds the supplied arrays");
 	}
 	LinearProgram* obj = Nan::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	MYBOOL ret = ::add_columnex(obj->lp, count, column, rowno);
@@ -1060,20 +1067,27 @@ NAN_METHOD(LinearProgram::set_columnex) {
 	int colnr = (int)(Nan::To<int32_t>(info[0]).ToChecked());
 	int count = (int)(Nan::To<int32_t>(info[1]).ToChecked());
 	REAL* column = NULL;
+	int column_n = 0;
 	if (info[2]->IsArray()) {
 		Local<Array> column_handle = Local<Array>::Cast(info[2]);
-		int column_n = column_handle->Length();
+		column_n = column_handle->Length();
 		column = new REAL[column_n];
 		for (int i = 0; i < column_n; i++)
 			column[i] = Nan::To<double>(Nan::Get(column_handle, i).ToLocalChecked()).ToChecked();
 	}
 	int* rowno = NULL;
+	int rowno_n = 0;
 	if (info[3]->IsArray()) {
 		Local<Array> rowno_handle = Local<Array>::Cast(info[3]);
-		int rowno_n = rowno_handle->Length();
+		rowno_n = rowno_handle->Length();
 		rowno = new int[rowno_n];
 		for (int i = 0; i < rowno_n; i++)
 			rowno[i] = Nan::To<int32_t>(Nan::Get(rowno_handle, i).ToLocalChecked()).ToChecked();
+	}
+	if (count < 0 || (column != NULL && count > column_n) || (rowno != NULL && count > rowno_n)) {
+		delete[] column;
+		delete[] rowno;
+		return Nan::ThrowRangeError("count exceeds the supplied arrays");
 	}
 	LinearProgram* obj = Nan::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	MYBOOL ret = ::set_columnex(obj->lp, colnr, count, column, rowno);
