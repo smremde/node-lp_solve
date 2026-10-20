@@ -877,20 +877,27 @@ NAN_METHOD(LinearProgram::get_constr_value) {
 	int rownr = (int)(Nan::To<int32_t>(info[0]).ToChecked());
 	int count = (int)(Nan::To<int32_t>(info[1]).ToChecked());
 	REAL* primsolution = NULL;
+	int primsolution_n = 0;
 	if (info[2]->IsArray()) {
 		Local<Array> primsolution_handle = Local<Array>::Cast(info[2]);
-		int primsolution_n = primsolution_handle->Length();
+		primsolution_n = primsolution_handle->Length();
 		primsolution = new REAL[primsolution_n];
 		for (int i = 0; i < primsolution_n; i++)
 			primsolution[i] = Nan::To<double>(Nan::Get(primsolution_handle, i).ToLocalChecked()).ToChecked();
 	}
 	int* nzindex = NULL;
+	int nzindex_n = 0;
 	if (info[3]->IsArray()) {
 		Local<Array> nzindex_handle = Local<Array>::Cast(info[3]);
-		int nzindex_n = nzindex_handle->Length();
+		nzindex_n = nzindex_handle->Length();
 		nzindex = new int[nzindex_n];
 		for (int i = 0; i < nzindex_n; i++)
 			nzindex[i] = Nan::To<int32_t>(Nan::Get(nzindex_handle, i).ToLocalChecked()).ToChecked();
+	}
+	if (count < 0 || (primsolution != NULL && count > primsolution_n) || (nzindex != NULL && count > nzindex_n)) {
+		delete[] primsolution;
+		delete[] nzindex;
+		return Nan::ThrowRangeError("count exceeds the supplied arrays");
 	}
 	LinearProgram* obj = Nan::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	REAL ret = ::get_constr_value(obj->lp, rownr, count, primsolution, nzindex);
@@ -1480,20 +1487,27 @@ NAN_METHOD(LinearProgram::add_SOS) {
 	int priority = (int)(Nan::To<int32_t>(info[2]).ToChecked());
 	int count = (int)(Nan::To<int32_t>(info[3]).ToChecked());
 	int* sosvars = NULL;
+	int sosvars_n = 0;
 	if (info[4]->IsArray()) {
 		Local<Array> sosvars_handle = Local<Array>::Cast(info[4]);
-		int sosvars_n = sosvars_handle->Length();
+		sosvars_n = sosvars_handle->Length();
 		sosvars = new int[sosvars_n];
 		for (int i = 0; i < sosvars_n; i++)
 			sosvars[i] = Nan::To<int32_t>(Nan::Get(sosvars_handle, i).ToLocalChecked()).ToChecked();
 	}
 	REAL* weights = NULL;
+	int weights_n = 0;
 	if (info[5]->IsArray()) {
 		Local<Array> weights_handle = Local<Array>::Cast(info[5]);
-		int weights_n = weights_handle->Length();
+		weights_n = weights_handle->Length();
 		weights = new REAL[weights_n];
 		for (int i = 0; i < weights_n; i++)
 			weights[i] = Nan::To<double>(Nan::Get(weights_handle, i).ToLocalChecked()).ToChecked();
+	}
+	if (count < 0 || (sosvars != NULL && count > sosvars_n) || (weights != NULL && count > weights_n)) {
+		delete[] sosvars;
+		delete[] weights;
+		return Nan::ThrowRangeError("count exceeds the supplied arrays");
 	}
 	LinearProgram* obj = Nan::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::add_SOS(obj->lp, name, sostype, priority, count, sosvars, weights);
