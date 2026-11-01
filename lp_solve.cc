@@ -586,8 +586,11 @@ NAN_METHOD(LinearProgram::set_obj_fnex) {
 	int* colno = new int[colno_n];
 	for (int i = 0; i < colno_n; i++)
 		colno[i] = Nan::To<int32_t>(Nan::Get(colno_handle, i).ToLocalChecked()).ToChecked();
-	LinearProgram* obj = Nan::ObjectWrap::Unwrap<LinearProgram>(info.This());
-	MYBOOL ret = ::set_obj_fnex(obj->lp, count, row, colno);
+	if (count < 0 || count > row_n || count > colno_n) {
+		delete[] row;
+		delete[] colno;
+		return Nan::ThrowRangeError("count exceeds the supplied arrays");
+	}	MYBOOL ret = ::set_obj_fnex(obj->lp, count, row, colno);
 	delete[] row;
 	delete[] colno;
 	info.GetReturnValue().Set(Nan::New<Boolean>(ret == 1));
@@ -874,20 +877,27 @@ NAN_METHOD(LinearProgram::get_constr_value) {
 	int rownr = (int)(Nan::To<int32_t>(info[0]).ToChecked());
 	int count = (int)(Nan::To<int32_t>(info[1]).ToChecked());
 	REAL* primsolution = NULL;
+	int primsolution_n = 0;
 	if (info[2]->IsArray()) {
 		Local<Array> primsolution_handle = Local<Array>::Cast(info[2]);
-		int primsolution_n = primsolution_handle->Length();
+		primsolution_n = primsolution_handle->Length();
 		primsolution = new REAL[primsolution_n];
 		for (int i = 0; i < primsolution_n; i++)
 			primsolution[i] = Nan::To<double>(Nan::Get(primsolution_handle, i).ToLocalChecked()).ToChecked();
 	}
 	int* nzindex = NULL;
+	int nzindex_n = 0;
 	if (info[3]->IsArray()) {
 		Local<Array> nzindex_handle = Local<Array>::Cast(info[3]);
-		int nzindex_n = nzindex_handle->Length();
+		nzindex_n = nzindex_handle->Length();
 		nzindex = new int[nzindex_n];
 		for (int i = 0; i < nzindex_n; i++)
 			nzindex[i] = Nan::To<int32_t>(Nan::Get(nzindex_handle, i).ToLocalChecked()).ToChecked();
+	}
+	if (count < 0 || (primsolution != NULL && count > primsolution_n) || (nzindex != NULL && count > nzindex_n)) {
+		delete[] primsolution;
+		delete[] nzindex;
+		return Nan::ThrowRangeError("count exceeds the supplied arrays");
 	}
 	LinearProgram* obj = Nan::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	REAL ret = ::get_constr_value(obj->lp, rownr, count, primsolution, nzindex);
@@ -994,20 +1004,27 @@ NAN_METHOD(LinearProgram::add_columnex) {
 	if (!(info[2]->IsArray() || info[2]->IsNull())) return Nan::ThrowTypeError("Third argument should be a Array of Numbers or NULL");
 	int count = (int)(Nan::To<int32_t>(info[0]).ToChecked());
 	REAL* column = NULL;
+	int column_n = 0;
 	if (info[1]->IsArray()) {
 		Local<Array> column_handle = Local<Array>::Cast(info[1]);
-		int column_n = column_handle->Length();
+		column_n = column_handle->Length();
 		column = new REAL[column_n];
 		for (int i = 0; i < column_n; i++)
 			column[i] = Nan::To<double>(Nan::Get(column_handle, i).ToLocalChecked()).ToChecked();
 	}
 	int* rowno = NULL;
+	int rowno_n = 0;
 	if (info[2]->IsArray()) {
 		Local<Array> rowno_handle = Local<Array>::Cast(info[2]);
-		int rowno_n = rowno_handle->Length();
+		rowno_n = rowno_handle->Length();
 		rowno = new int[rowno_n];
 		for (int i = 0; i < rowno_n; i++)
 			rowno[i] = Nan::To<int32_t>(Nan::Get(rowno_handle, i).ToLocalChecked()).ToChecked();
+	}
+	if (count < 0 || (column != NULL && count > column_n) || (rowno != NULL && count > rowno_n)) {
+		delete[] column;
+		delete[] rowno;
+		return Nan::ThrowRangeError("count exceeds the supplied arrays");
 	}
 	LinearProgram* obj = Nan::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	MYBOOL ret = ::add_columnex(obj->lp, count, column, rowno);
@@ -1057,20 +1074,27 @@ NAN_METHOD(LinearProgram::set_columnex) {
 	int colnr = (int)(Nan::To<int32_t>(info[0]).ToChecked());
 	int count = (int)(Nan::To<int32_t>(info[1]).ToChecked());
 	REAL* column = NULL;
+	int column_n = 0;
 	if (info[2]->IsArray()) {
 		Local<Array> column_handle = Local<Array>::Cast(info[2]);
-		int column_n = column_handle->Length();
+		column_n = column_handle->Length();
 		column = new REAL[column_n];
 		for (int i = 0; i < column_n; i++)
 			column[i] = Nan::To<double>(Nan::Get(column_handle, i).ToLocalChecked()).ToChecked();
 	}
 	int* rowno = NULL;
+	int rowno_n = 0;
 	if (info[3]->IsArray()) {
 		Local<Array> rowno_handle = Local<Array>::Cast(info[3]);
-		int rowno_n = rowno_handle->Length();
+		rowno_n = rowno_handle->Length();
 		rowno = new int[rowno_n];
 		for (int i = 0; i < rowno_n; i++)
 			rowno[i] = Nan::To<int32_t>(Nan::Get(rowno_handle, i).ToLocalChecked()).ToChecked();
+	}
+	if (count < 0 || (column != NULL && count > column_n) || (rowno != NULL && count > rowno_n)) {
+		delete[] column;
+		delete[] rowno;
+		return Nan::ThrowRangeError("count exceeds the supplied arrays");
 	}
 	LinearProgram* obj = Nan::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	MYBOOL ret = ::set_columnex(obj->lp, colnr, count, column, rowno);
@@ -1463,20 +1487,27 @@ NAN_METHOD(LinearProgram::add_SOS) {
 	int priority = (int)(Nan::To<int32_t>(info[2]).ToChecked());
 	int count = (int)(Nan::To<int32_t>(info[3]).ToChecked());
 	int* sosvars = NULL;
+	int sosvars_n = 0;
 	if (info[4]->IsArray()) {
 		Local<Array> sosvars_handle = Local<Array>::Cast(info[4]);
-		int sosvars_n = sosvars_handle->Length();
+		sosvars_n = sosvars_handle->Length();
 		sosvars = new int[sosvars_n];
 		for (int i = 0; i < sosvars_n; i++)
 			sosvars[i] = Nan::To<int32_t>(Nan::Get(sosvars_handle, i).ToLocalChecked()).ToChecked();
 	}
 	REAL* weights = NULL;
+	int weights_n = 0;
 	if (info[5]->IsArray()) {
 		Local<Array> weights_handle = Local<Array>::Cast(info[5]);
-		int weights_n = weights_handle->Length();
+		weights_n = weights_handle->Length();
 		weights = new REAL[weights_n];
 		for (int i = 0; i < weights_n; i++)
 			weights[i] = Nan::To<double>(Nan::Get(weights_handle, i).ToLocalChecked()).ToChecked();
+	}
+	if (count < 0 || (sosvars != NULL && count > sosvars_n) || (weights != NULL && count > weights_n)) {
+		delete[] sosvars;
+		delete[] weights;
+		return Nan::ThrowRangeError("count exceeds the supplied arrays");
 	}
 	LinearProgram* obj = Nan::ObjectWrap::Unwrap<LinearProgram>(info.This());
 	::add_SOS(obj->lp, name, sostype, priority, count, sosvars, weights);
